@@ -30,23 +30,37 @@ margin_bottom = 24.0
 text = "Menu"
 
 [node name="Button2" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+visible = false
 margin_left = 52.0
 margin_right = 79.0
 margin_bottom = 24.0
 shortcut = SubResource( 2 )
 text = "F5"
 
+[node name="Button4" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 52.0
+margin_right = 72.0
+margin_bottom = 24.0
+shortcut = SubResource( 2 )
+text = "X"
+
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 83.0
-margin_right = 984.0
+margin_left = 76.0
+margin_right = 926.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 988.0
-margin_right = 1024.0
+margin_left = 930.0
+margin_right = 966.0
 margin_bottom = 24.0
 text = "==>"
+
+[node name="Button3" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 970.0
+margin_right = 1024.0
+margin_bottom = 24.0
+text = "Search"
 
 [node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
 margin_top = 36.0
@@ -79,6 +93,8 @@ selection_enabled = true
 
 [node name="BingHelp" parent="." instance=ExtResource( 2 )]
 
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
 [connection signal="text_entered" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]

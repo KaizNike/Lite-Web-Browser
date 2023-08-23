@@ -9,6 +9,7 @@ extends Node
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var error = $HTTPRequest.request("https://godotengine.org")
+	$UI/VSplitContainer/HBoxContainer/LineEdit.text = "https://godotengine.org"
 	print(error)
 	pass # Replace with function body.
 
@@ -58,3 +59,13 @@ func _on_LineEdit_text_entered(new_text):
 
 func _on_Button_pressed():
 	_on_LineEdit_text_entered($UI/VSplitContainer/HBoxContainer/LineEdit.text)
+
+
+func _on_Button3_pressed():
+	print("Searching with DDG! Quack.")
+	_on_LineEdit_text_entered("https://duckduckgo.com/?q=" + $UI/VSplitContainer/HBoxContainer/LineEdit.text.percent_encode())
+
+
+func _on_Button4_pressed():
+	$HTTPRequest.cancel_request()
+	pass # Replace with function body.
