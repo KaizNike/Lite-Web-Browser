@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/App.gd" type="Script" id=1]
 [ext_resource path="res://src/BingHelp.tscn" type="PackedScene" id=2]
@@ -8,6 +8,274 @@ action = "refresh"
 
 [sub_resource type="ShortCut" id=2]
 shortcut = SubResource( 1 )
+
+[sub_resource type="OpenSimplexNoise" id=3]
+period = 37.2
+
+[sub_resource type="NoiseTexture" id=4]
+width = 32
+height = 32
+noise = SubResource( 3 )
+noise_offset = Vector2( 12, 6 )
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:self_modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:self_modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:self_modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath(".:texture:noise_offset:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 12, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath(".:texture:noise_offset:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 6, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "cancel"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:self_modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:self_modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:self_modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "failed"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:self_modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0.968415, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:self_modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:self_modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0.975847, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "loaded"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:self_modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.666667, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:self_modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:self_modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.745098, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "loading"
+length = 0.6
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:self_modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.654902, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:self_modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.556863, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:self_modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.262745, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath(".:texture:noise_offset:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 12, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath(".:texture:noise_offset:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 6, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
+}
 
 [node name="App" type="Node"]
 script = ExtResource( 1 )
@@ -22,11 +290,11 @@ anchor_bottom = 1.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/VSplitContainer"]
 margin_right = 1024.0
-margin_bottom = 24.0
+margin_bottom = 32.0
 
 [node name="MenuButton" type="MenuButton" parent="UI/VSplitContainer/HBoxContainer"]
 margin_right = 48.0
-margin_bottom = 24.0
+margin_bottom = 32.0
 text = "Menu"
 
 [node name="Button2" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
@@ -40,44 +308,77 @@ text = "F5"
 [node name="Button5" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 52.0
 margin_right = 77.0
-margin_bottom = 24.0
+margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "<-"
 
 [node name="Button6" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 81.0
 margin_right = 106.0
-margin_bottom = 24.0
+margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "->"
 
 [node name="Button4" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 110.0
 margin_right = 130.0
-margin_bottom = 24.0
+margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "X"
 
-[node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
+[node name="ProgressText" type="TextureRect" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 134.0
-margin_right = 926.0
-margin_bottom = 24.0
+margin_right = 166.0
+margin_bottom = 32.0
+texture = SubResource( 4 )
+stretch_mode = 2
+
+[node name="ProgressAnim" type="AnimationPlayer" parent="UI/VSplitContainer/HBoxContainer/ProgressText"]
+anims/RESET = SubResource( 5 )
+anims/cancel = SubResource( 9 )
+anims/failed = SubResource( 7 )
+anims/loaded = SubResource( 6 )
+anims/loading = SubResource( 8 )
+
+[node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 170.0
+margin_right = 744.0
+margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 930.0
-margin_right = 966.0
-margin_bottom = 24.0
+margin_left = 748.0
+margin_right = 784.0
+margin_bottom = 32.0
 text = "==>"
 
 [node name="Button3" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 970.0
-margin_right = 1024.0
-margin_bottom = 24.0
+margin_left = 788.0
+margin_right = 842.0
+margin_bottom = 32.0
 text = "Search"
 
+[node name="CheckBox" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 846.0
+margin_right = 904.0
+margin_bottom = 32.0
+pressed = true
+text = "DDG"
+
+[node name="CheckBox2" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 908.0
+margin_right = 964.0
+margin_bottom = 32.0
+text = "Wiki"
+
+[node name="CheckBox3" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 968.0
+margin_right = 1024.0
+margin_bottom = 32.0
+text = "AO3"
+
 [node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
-margin_top = 36.0
+margin_top = 44.0
 margin_right = 1024.0
 margin_bottom = 600.0
 
@@ -117,4 +418,7 @@ margin_bottom = 40.0
 [connection signal="text_entered" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
+[connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]
+[connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox3" to="." method="_on_CheckBox3_toggled"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
