@@ -342,17 +342,40 @@ anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 170.0
-margin_right = 744.0
+margin_right = 778.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 748.0
-margin_right = 784.0
+margin_left = 782.0
+margin_right = 818.0
 margin_bottom = 32.0
 text = "==>"
 
+[node name="FindButtonPrv" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 822.0
+margin_right = 842.0
+margin_bottom = 32.0
+disabled = true
+text = "<"
+
+[node name="FindButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+visible = false
+margin_left = 721.0
+margin_right = 760.0
+margin_bottom = 32.0
+text = "Find"
+
+[node name="FindButtonNxt" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+visible = false
+margin_left = 764.0
+margin_right = 784.0
+margin_bottom = 32.0
+disabled = true
+text = ">"
+
 [node name="Button3" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+visible = false
 margin_left = 788.0
 margin_right = 842.0
 margin_bottom = 32.0
@@ -417,6 +440,9 @@ margin_bottom = 40.0
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
 [connection signal="text_entered" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonPrv" to="." method="_on_FindButtonPrv_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButton" to="." method="_on_FindButton_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonNxt" to="." method="_on_FindButtonNxt_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]

@@ -3,6 +3,9 @@ extends Node
 var paths = []
 var pathIndex = 0
 var currentSearch = "DDG"
+var currentMatch = 0
+var matches = []
+var Query = ""
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -130,7 +133,7 @@ func _on_CheckBox2_toggled(button_pressed):
 		currentSearch = ""
 	pass # Replace with function body.
 
-
+# AO3
 func _on_CheckBox3_toggled(button_pressed):
 	if button_pressed:
 		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
@@ -138,4 +141,46 @@ func _on_CheckBox3_toggled(button_pressed):
 		currentSearch = "AO3"
 	else:
 		currentSearch = ""
+	pass # Replace with function body.
+
+# BingAI, Find
+func _on_FindButton_pressed():
+	var query = $UI/VSplitContainer/HBoxContainer/LineEdit.text
+	Query = query
+	if query:
+		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loading")
+		var text = ""
+		if $UI/VSplitContainer/TabContainer/Page.visible:
+			text = $UI/VSplitContainer/TabContainer/Page.text
+		elif $UI/VSplitContainer/TabContainer/HTML.visible:
+			text = $UI/VSplitContainer/TabContainer/HTML.text
+		var start_index = 0
+		while true:
+			var match_start = text.find(query,start_index)
+			if match_start == -1:
+				break
+			matches.append(match_start)
+			start_index = match_start + query.length()
+		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loaded")
+		if matches:
+			$UI/VSplitContainer/HBoxContainer/FindButtonNxt.disabled = false
+			$UI/VSplitContainer/HBoxContainer/FindButtonPrv.disabled = false
+		else:
+			$UI/VSplitContainer/HBoxContainer/FindButtonNxt.disabled = true
+			$UI/VSplitContainer/HBoxContainer/FindButtonPrv.disabled = true	
+	else:
+		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("cancel")
+
+
+func _on_FindButtonPrv_pressed():
+	pass # Replace with function body.
+
+
+func _on_FindButtonNxt_pressed():
+	if len(matches) > 0:
+		currentMatch = (currentMatch+1) %len(matches)
+		if $UI/VSplitContainer/TabContainer/Page.visible:
+			$UI/VSplitContainer/TabContainer/Page.select(matches[currentMatch],matches[currentMatch]+Query.length())
+		elif $UI/VSplitContainer/TabContainer/HTML.visible:
+			$UI/VSplitContainer/TabContainer/HTML.select(matches[currentMatch],matches[currentMatch]+Query.length())
 	pass # Replace with function body.
