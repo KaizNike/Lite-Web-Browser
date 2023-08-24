@@ -39,5 +39,16 @@ func extract_text_and_links(html: String) -> Dictionary:
 						start_index = end_tag_index + end_tag.length()
 						continue
 					pass
+				elif tag.begins_with("img "):
+					var alt_index = tag.find("alt=")
+					if alt_index != -1:
+						alt_index += 4
+						var quote_char = tag[ alt_index ]
+						var end_quote_index = tag.find(quote_char, alt_index + 1)
+						if end_quote_index != -1:
+							var text = tag.substr(alt_index + 1, end_quote_index - alt_index - 1)
+							result["text"] += text
+					
+					pass
 				start_index = close_tag_index + 1
 	return result
