@@ -362,3 +362,13 @@ func _on_FindLast_pressed():
 		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
 			select_term(new_term,textToFind)
 	pass # Replace with function body.
+
+
+func _on_WrapBox_toggled(button_pressed):
+	if button_pressed:
+		page.wrap_enabled = true
+		html.wrap_enabled = true
+	else:
+		page.wrap_enabled = false
+		html.wrap_enabled = false
+	pass # Replace with function body.

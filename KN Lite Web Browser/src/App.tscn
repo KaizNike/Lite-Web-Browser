@@ -297,6 +297,13 @@ margin_right = 48.0
 margin_bottom = 32.0
 text = "Menu"
 
+[node name="WrapBox" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 52.0
+margin_right = 113.0
+margin_bottom = 32.0
+pressed = true
+text = "Wrap"
+
 [node name="Button2" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
 margin_left = 52.0
@@ -306,29 +313,29 @@ shortcut = SubResource( 2 )
 text = "F5"
 
 [node name="Button5" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 52.0
-margin_right = 77.0
+margin_left = 117.0
+margin_right = 142.0
 margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "<-"
 
 [node name="Button6" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 81.0
-margin_right = 106.0
+margin_left = 146.0
+margin_right = 171.0
 margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "->"
 
 [node name="Button4" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 110.0
-margin_right = 130.0
+margin_left = 175.0
+margin_right = 195.0
 margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "X"
 
 [node name="ProgressText" type="TextureRect" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 134.0
-margin_right = 166.0
+margin_left = 199.0
+margin_right = 231.0
 margin_bottom = 32.0
 texture = SubResource( 4 )
 stretch_mode = 2
@@ -341,7 +348,7 @@ anims/loaded = SubResource( 6 )
 anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 170.0
+margin_left = 235.0
 margin_right = 744.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
@@ -414,6 +421,7 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 bookmark_gutter = true
+wrap_enabled = true
 minimap_draw = true
 
 [node name="HTML" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
@@ -426,6 +434,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 text = "<html></html>"
 bookmark_gutter = true
+wrap_enabled = true
 minimap_draw = true
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/VSplitContainer"]
@@ -488,6 +497,7 @@ text = "X"
 margin_right = 40.0
 margin_bottom = 40.0
 
+[connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/WrapBox" to="." method="_on_WrapBox_toggled"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button5" to="." method="_on_Button5_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button6" to="." method="_on_Button6_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
