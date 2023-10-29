@@ -239,15 +239,26 @@ func _on_FinderLineEdit_text_changed(new_text):
 #				searching = false
 #		print(terms)
 		new_term = page.search(new_text, 0, lineI, colI)
+		var last_lineI = 0
 		while new_term:
 			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
 			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
-			if lineI > 1:
-				print("Check")
-			if termsAmt > 537:
-				print("Stop Here")
+			if lineI < last_lineI:
+				break
+#			if lineI > 1:
+#				print(lineI)
+			if lineI >= page.get_line_count() - 50:
+				print(lineI)
 			page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
 			termsAmt += 1
+			if colI >= page.get_line(lineI).length():
+				colI = 0
+				lineI += 1
+			elif lineI >= page.get_line_count() - 1:
+				break
+			else:
+				colI += 1
+			last_lineI = lineI
 			new_term = page.search(new_text, 0, lineI, colI)
 		if termsAmt > 0:
 			colI = page.cursor_get_column()
