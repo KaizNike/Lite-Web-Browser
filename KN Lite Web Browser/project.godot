@@ -11,8 +11,9 @@ config_version=4
 [application]
 
 config/name="KN Lite Web Browser"
+config/description="Browse the web lightly!"
 run/main_scene="res://src/App.tscn"
-config/icon="res://icon.png"
+config/icon="res://LWBIcon.png"
 
 [gui]
 
