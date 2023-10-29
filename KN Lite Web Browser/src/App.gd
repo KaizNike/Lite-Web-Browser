@@ -5,14 +5,23 @@ var pathIndex = 0
 var currentSearch = "DDG"
 var currentMatch = 0
 var matches = []
+var Match = {}
 var Query = ""
+
+var terms = []
+var termsAmt = 0
+var textToFind = ""
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 
+onready var page = $UI/VSplitContainer/TabContainer/Page
+onready var html = $UI/VSplitContainer/TabContainer/HTML
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var menu1 = page.get_menu()
+	var menu2 = html.get_menu()
 	var init = "https://godotengine.org"
 	_on_LineEdit_text_entered(init)
 
@@ -29,16 +38,16 @@ func parse(Html):
 
 func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 	if response_code != 200:
-		$UI/VSplitContainer/TabContainer/Page.text = "Error: " + str(response_code)
-		$UI/VSplitContainer/TabContainer/HTML.text = "Error: " + str(response_code)
+		page.text = "Error: " + str(response_code)
+		html.text = "Error: " + str(response_code)
 #		return("HTTP Response: " + str(response_code))
 		print(response_code)
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("failed")
 	else:
-		var html = body.get_string_from_utf8()
-		$UI/VSplitContainer/TabContainer/HTML.text = html
-		var search = $BingHelp.extract_text_and_links(html)
-		$UI/VSplitContainer/TabContainer/Page.text = str(search)
+		var Html = body.get_string_from_utf8()
+		html.text = Html
+		var search = $BingHelp.extract_text_and_links(Html)
+		page.text = str(search).percent_decode()
 		print("Loaded")
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loaded")
 		pathIndex += 1
@@ -48,11 +57,11 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 ##		sorta worked
 #		var search = regex.search_all(html)
 #		if !search:
-#			$UI/VSplitContainer/TabContainer/Page.text = "Regex fail." + str(error)
+#			page.text = "Regex fail." + str(error)
 #		else:
 #			print(search)
 #			for part in search:
-#				$UI/VSplitContainer/TabContainer/Page.text += part.get_string() + "\n\n"
+#				page.text += part.get_string() + "\n\n"
 	pass # Replace with function body.
 
 
@@ -61,8 +70,8 @@ func _on_LineEdit_text_entered(new_text):
 	$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loading")
 	var request = $HTTPRequest.request(new_text)
 	if request != OK:
-		$UI/VSplitContainer/TabContainer/Page.text = "Error: " + str(request)
-		$UI/VSplitContainer/TabContainer/HTML.text = "Error: " + str(request)
+		page.text = "Error: " + str(request)
+		html.text = "Error: " + str(request)
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("failed")
 		print(request)
 	paths.append(new_text)
@@ -86,8 +95,8 @@ func _on_Button3_pressed():
 		print("Reading about it on A03")
 		search_term = "https://archiveofourown.org/works/search?work_search%5Bquery%5D=" + query
 	else:
-		$UI/VSplitContainer/TabContainer/Page.text = "No search selected."
-		$UI/VSplitContainer/TabContainer/HTML.text = "No html from search not selected."
+		page.text = "No search selected."
+		html.text = "No html from search not selected."
 #	var search_term = "https://api.duckduckgo.com/?q=" + query + "&format=html"
 #	paths.append(search_term)
 	$UI/VSplitContainer/HBoxContainer/LineEdit.text = search_term
@@ -150,10 +159,10 @@ func _on_FindButton_pressed():
 	if query:
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loading")
 		var text = ""
-		if $UI/VSplitContainer/TabContainer/Page.visible:
-			text = $UI/VSplitContainer/TabContainer/Page.text
-		elif $UI/VSplitContainer/TabContainer/HTML.visible:
-			text = $UI/VSplitContainer/TabContainer/HTML.text
+		if page.visible:
+			text = page.text
+		elif html.visible:
+			text = html.text
 		var start_index = 0
 		while true:
 			var match_start = text.find(query,start_index)
@@ -179,8 +188,80 @@ func _on_FindButtonPrv_pressed():
 func _on_FindButtonNxt_pressed():
 	if len(matches) > 0:
 		currentMatch = (currentMatch+1) %len(matches)
-		if $UI/VSplitContainer/TabContainer/Page.visible:
-			$UI/VSplitContainer/TabContainer/Page.select(matches[currentMatch],matches[currentMatch]+Query.length())
-		elif $UI/VSplitContainer/TabContainer/HTML.visible:
-			$UI/VSplitContainer/TabContainer/HTML.select(matches[currentMatch],matches[currentMatch]+Query.length())
+		if page.visible:
+			page.select(matches[currentMatch],matches[currentMatch]+Query.length())
+		elif html.visible:
+			html.select(matches[currentMatch],matches[currentMatch]+Query.length())
+	pass # Replace with function body.
+
+
+func select_term(loc, text):
+	if page.visible:
+		page.select(loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN], loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN] + text.length())
+		page.cursor_set_line(loc[TextEdit.SEARCH_RESULT_LINE])
+		page.cursor_set_column(loc[TextEdit.SEARCH_RESULT_COLUMN])
+	pass
+
+
+func _on_FinderLineEdit_text_changed(new_text):
+	if page.visible:
+		for line in range(page.get_line_count()):
+			page.set_line_as_bookmark(line, false)
+	elif html.visible:
+		for line in range(html.get_line_count()):
+			html.set_line_as_bookmark(line, false)
+	terms.clear()
+	termsAmt = 0
+	if new_text == "":
+		return
+	textToFind = new_text
+	if page.visible:
+		var new_term
+		var searching = true
+		var colI = 0
+		var lineI = 0
+#		while searching:
+#			new_term = page.search(new_text, 0, lineI, colI)
+#			if new_term:
+##				terms.append(new_term)
+#				termsAmt += 1
+#				if termsAmt > 25000:
+#					print("Wow.")
+##				page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
+#				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
+#				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
+#			else:
+#				searching = false
+#			if colI >= page.get_line(lineI).length():
+#				colI = 0
+#				lineI += 1
+#			elif lineI >= page.get_line_count():
+#				searching = false
+#		print(terms)
+		new_term = page.search(new_text, 0, lineI, colI)
+		while new_term:
+			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
+			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
+			if lineI > 1:
+				print("Check")
+			if termsAmt > 537:
+				print("Stop Here")
+			page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
+			termsAmt += 1
+			new_term = page.search(new_text, 0, lineI, colI)
+		if termsAmt > 0:
+			colI = page.cursor_get_column()
+			lineI = page.cursor_get_line()
+			new_term = page.search(new_text, 0, lineI, colI)
+			if not new_term:
+				new_term = page.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
+			if new_term:
+				select_term(new_term, new_text)
+				page.highlight_all_occurrences = true
+				$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termsAmt)
+		pass
+	elif html.visible:
+		var new_term = html.search(new_text, 0, 0, 0)
+		pass
+	
 	pass # Replace with function body.

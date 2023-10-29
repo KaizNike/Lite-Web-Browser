@@ -284,7 +284,7 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VSplitContainer" type="VSplitContainer" parent="UI"]
+[node name="VSplitContainer" type="VBoxContainer" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -342,17 +342,18 @@ anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 170.0
-margin_right = 778.0
+margin_right = 744.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 782.0
-margin_right = 818.0
+margin_left = 748.0
+margin_right = 784.0
 margin_bottom = 32.0
 text = "==>"
 
 [node name="FindButtonPrv" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+visible = false
 margin_left = 822.0
 margin_right = 842.0
 margin_bottom = 32.0
@@ -375,7 +376,6 @@ disabled = true
 text = ">"
 
 [node name="Button3" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-visible = false
 margin_left = 788.0
 margin_right = 842.0
 margin_bottom = 32.0
@@ -401,21 +401,22 @@ margin_bottom = 32.0
 text = "AO3"
 
 [node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
-margin_top = 44.0
+margin_top = 36.0
 margin_right = 1024.0
-margin_bottom = 600.0
+margin_bottom = 558.0
+size_flags_vertical = 3
 
-[node name="Page" type="RichTextLabel" parent="UI/VSplitContainer/TabContainer"]
+[node name="Page" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-focus_mode = 2
-selection_enabled = true
+bookmark_gutter = true
+minimap_draw = true
 
-[node name="HTML" type="RichTextLabel" parent="UI/VSplitContainer/TabContainer"]
+[node name="HTML" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -423,9 +424,61 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-focus_mode = 2
 text = "<html></html>"
-selection_enabled = true
+bookmark_gutter = true
+minimap_draw = true
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/VSplitContainer"]
+margin_top = 562.0
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VSplitContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 31.0
+
+[node name="Label" type="Label" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 81.0
+margin_bottom = 19.0
+text = "Find in page:"
+
+[node name="FinderLineEdit" type="LineEdit" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+margin_left = 85.0
+margin_right = 884.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+
+[node name="TermsAmt" type="Label" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+margin_left = 888.0
+margin_top = 5.0
+margin_right = 958.0
+margin_bottom = 19.0
+text = "Matches: 0"
+
+[node name="Button" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+margin_left = 962.0
+margin_right = 984.0
+margin_bottom = 24.0
+disabled = true
+text = "/\\"
+
+[node name="Button2" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+margin_left = 988.0
+margin_right = 1010.0
+margin_bottom = 24.0
+disabled = true
+text = "\\/"
+
+[node name="Button3" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+visible = false
+margin_left = 990.0
+margin_right = 1010.0
+margin_bottom = 24.0
+text = "X"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
@@ -447,4 +500,5 @@ margin_bottom = 40.0
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox3" to="." method="_on_CheckBox3_toggled"]
+[connection signal="text_changed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FinderLineEdit" to="." method="_on_FinderLineEdit_text_changed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
