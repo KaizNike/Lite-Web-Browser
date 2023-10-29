@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/App.gd" type="Script" id=1]
 [ext_resource path="res://src/BingHelp.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/BookMark.tscn" type="PackedScene" id=3]
 
 [sub_resource type="InputEventAction" id=1]
 action = "refresh"
@@ -279,6 +280,7 @@ tracks/5/keys = {
 
 [node name="App" type="Node"]
 script = ExtResource( 1 )
+new_bookmark = ExtResource( 3 )
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -349,13 +351,13 @@ anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 235.0
-margin_right = 744.0
+margin_right = 697.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 748.0
-margin_right = 784.0
+margin_left = 701.0
+margin_right = 737.0
 margin_bottom = 32.0
 text = "==>"
 
@@ -373,6 +375,12 @@ margin_left = 721.0
 margin_right = 760.0
 margin_bottom = 32.0
 text = "Find"
+
+[node name="BookMarkButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 741.0
+margin_right = 784.0
+margin_bottom = 32.0
+text = "Mark"
 
 [node name="FindButtonNxt" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
@@ -407,8 +415,16 @@ margin_right = 1024.0
 margin_bottom = 32.0
 text = "AO3"
 
-[node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
+[node name="BookMarksBar" type="HBoxContainer" parent="UI/VSplitContainer"]
 margin_top = 36.0
+margin_right = 1024.0
+margin_bottom = 36.0
+
+[node name="BookMark" parent="UI/VSplitContainer/BookMarksBar" instance=ExtResource( 3 )]
+visible = false
+
+[node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
+margin_top = 40.0
 margin_right = 1024.0
 margin_bottom = 558.0
 size_flags_vertical = 3
@@ -491,6 +507,8 @@ text = "X"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
+[node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
+
 [node name="BingHelp" parent="." instance=ExtResource( 2 )]
 
 [node name="Popup" type="Popup" parent="."]
@@ -505,6 +523,7 @@ margin_bottom = 40.0
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonPrv" to="." method="_on_FindButtonPrv_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButton" to="." method="_on_FindButton_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/BookMarkButton" to="." method="_on_BookMarkButton_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonNxt" to="." method="_on_FindButtonNxt_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
@@ -514,3 +533,4 @@ margin_bottom = 40.0
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast" to="." method="_on_FindLast_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext" to="." method="_on_FindNext_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="request_completed" from="ImageHTTPRequest" to="." method="_on_ImageHTTPRequest_request_completed"]

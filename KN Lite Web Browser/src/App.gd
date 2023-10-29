@@ -4,6 +4,7 @@ var paths = []
 var pathIndex = 0
 var currentSearch = "DDG"
 var currentMatch = 0
+var currentSite = ""
 var matches = []
 var Match = {}
 var Query = ""
@@ -11,6 +12,8 @@ var Query = ""
 var terms = []
 var termsAmt = 0
 var textToFind = ""
+
+var bookmarks = []
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -18,11 +21,16 @@ var textToFind = ""
 onready var page = $UI/VSplitContainer/TabContainer/Page
 onready var html = $UI/VSplitContainer/TabContainer/HTML
 
+export (PackedScene) var new_bookmark
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Globals.connect("bookmarkClicked",self,"bookmark_pressed")
 	var menu1 = page.get_menu()
 	var menu2 = html.get_menu()
 	var init = "https://godotengine.org"
+	$UI/VSplitContainer/HBoxContainer/LineEdit.text = "https://godotengine.org"
+	currentSite = "https://godotengine.org"
 	_on_LineEdit_text_entered(init)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -74,7 +82,9 @@ func _on_LineEdit_text_entered(new_text):
 		html.text = "Error: " + str(request)
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("failed")
 		print(request)
+		return
 	paths.append(new_text)
+	currentSite = new_text
 	pass # Replace with function body.
 
 
@@ -105,6 +115,7 @@ func _on_Button3_pressed():
 # Cancel
 func _on_Button4_pressed():
 	$HTTPRequest.cancel_request()
+	$ImageHTTPRequest.cancel_request()
 	$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("cancel")
 	pass # Replace with function body.
 
@@ -372,3 +383,38 @@ func _on_WrapBox_toggled(button_pressed):
 		page.wrap_enabled = false
 		html.wrap_enabled = false
 	pass # Replace with function body.
+
+
+func _on_BookMarkButton_pressed():
+	if currentSite in bookmarks:
+		print("Already bookmarked.")
+		return
+	print("Request started for bookmark.")
+	$ImageHTTPRequest.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + currentSite + "&size=16")
+	bookmarks.append(currentSite)
+	pass # Replace with function body.
+
+
+func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body):
+	if response_code == 200:
+#		$UI/VSplitContainer/HBoxContainer/BookMarkButton.texture_normal = body
+		var bookMarkInstance = new_bookmark.instance()
+		bookMarkInstance.site = currentSite
+		var image = Image.new()
+		var err = image.load_png_from_buffer(body)
+		if err == OK:
+			var texture = ImageTexture.new()
+			texture.create_from_image(image)
+			bookMarkInstance.get_node("TextureBookMark").set_normal_texture(texture)
+			$UI/VSplitContainer/BookMarksBar.add_child(bookMarkInstance)
+		else:
+			print("Failed to load image from buffer." + str(err))
+	else:
+		print(response_code)
+	pass # Replace with function body.
+
+func bookmark_pressed(site):
+	if site == currentSite:
+		return
+	else:
+		_on_LineEdit_text_entered(site)

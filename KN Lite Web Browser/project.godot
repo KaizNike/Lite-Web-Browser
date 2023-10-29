@@ -15,6 +15,10 @@ config/description="Browse the web lightly!"
 run/main_scene="res://src/App.tscn"
 config/icon="res://LWBIcon.png"
 
+[autoload]
+
+Globals="*res://src/Globals.gd"
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
