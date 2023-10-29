@@ -200,10 +200,16 @@ func select_term(loc, text):
 		page.select(loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN], loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN] + text.length())
 		page.cursor_set_line(loc[TextEdit.SEARCH_RESULT_LINE])
 		page.cursor_set_column(loc[TextEdit.SEARCH_RESULT_COLUMN])
+	if html.visible:
+		html.select(loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN], loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN] + text.length())
+		html.cursor_set_line(loc[TextEdit.SEARCH_RESULT_LINE])
+		html.cursor_set_column(loc[TextEdit.SEARCH_RESULT_COLUMN])
 	pass
 
 
 func _on_FinderLineEdit_text_changed(new_text):
+	$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = true
+	$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = true
 	if page.visible:
 		for line in range(page.get_line_count()):
 			page.set_line_as_bookmark(line, false)
@@ -220,45 +226,30 @@ func _on_FinderLineEdit_text_changed(new_text):
 		var searching = true
 		var colI = 0
 		var lineI = 0
-#		while searching:
-#			new_term = page.search(new_text, 0, lineI, colI)
-#			if new_term:
-##				terms.append(new_term)
-#				termsAmt += 1
-#				if termsAmt > 25000:
-#					print("Wow.")
-##				page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
-#				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
-#				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
-#			else:
-#				searching = false
-#			if colI >= page.get_line(lineI).length():
-#				colI = 0
-#				lineI += 1
-#			elif lineI >= page.get_line_count():
-#				searching = false
-#		print(terms)
 		new_term = page.search(new_text, 0, lineI, colI)
 		var last_lineI = 0
+		var last_colI = 0
 		while new_term:
 			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
 			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
-			if lineI < last_lineI:
+			if lineI < last_lineI or (colI < last_colI and lineI == last_lineI):
 				break
 #			if lineI > 1:
 #				print(lineI)
-			if lineI >= page.get_line_count() - 50:
-				print(lineI)
+#			if lineI >= page.get_line_count() - 50:
+#				print(lineI)
 			page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
 			termsAmt += 1
 			if colI >= page.get_line(lineI).length():
 				colI = 0
+				last_colI = 0
 				lineI += 1
-			elif lineI >= page.get_line_count() - 1:
-				break
+#			elif lineI >= page.get_line_count() - 1:
+#				break
 			else:
 				colI += 1
 			last_lineI = lineI
+			last_colI = colI
 			new_term = page.search(new_text, 0, lineI, colI)
 		if termsAmt > 0:
 			colI = page.cursor_get_column()
@@ -266,13 +257,108 @@ func _on_FinderLineEdit_text_changed(new_text):
 			new_term = page.search(new_text, 0, lineI, colI)
 			if not new_term:
 				new_term = page.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
+				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN]
+				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
 			if new_term:
 				select_term(new_term, new_text)
 				page.highlight_all_occurrences = true
 				$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termsAmt)
+				if termsAmt > 1:
+					new_term = page.search(new_text, 0, lineI, colI + new_text.length())
+					if new_term:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
+							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = false
+					new_term = page.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
+					if new_term:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
+							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = false
+		else:
+			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(0)
 		pass
-	elif html.visible:
-		var new_term = html.search(new_text, 0, 0, 0)
+	if html.visible:
+		var new_term
+		var searching = true
+		var colI = 0
+		var lineI = 0
+		new_term = html.search(new_text, 0, lineI, colI)
+		var last_lineI = 0
+		var last_colI = 0
+		while new_term:
+			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
+			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
+			if lineI < last_lineI or (colI < last_colI and lineI == last_lineI):
+				break
+#			if lineI > 1:
+#				print(lineI)
+#			if lineI >= html.get_line_count() - 50:
+#				print(lineI)
+			html.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
+			termsAmt += 1
+			if colI >= html.get_line(lineI).length():
+				colI = 0
+				last_colI = 0
+				lineI += 1
+#			elif lineI >= html.get_line_count() - 1:
+#				break
+			else:
+				colI += 1
+			last_lineI = lineI
+			last_colI = colI
+			new_term = html.search(new_text, 0, lineI, colI)
+		if termsAmt > 0:
+			colI = html.cursor_get_column()
+			lineI = html.cursor_get_line()
+			new_term = html.search(new_text, 0, lineI, colI)
+			if not new_term:
+				new_term = html.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
+				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN]
+				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
+			if new_term:
+				select_term(new_term, new_text)
+				html.highlight_all_occurrences = true
+				$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termsAmt)
+				if termsAmt > 1:
+					new_term = html.search(new_text, 0, lineI, colI + new_text.length())
+					if new_term:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
+							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = false
+					new_term = html.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
+					if new_term:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
+							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = false
+		else:
+			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(0)
 		pass
-	
+	pass # Replace with function body.
+
+
+func _on_FindNext_pressed():
+	if page.visible:
+		var colI = page.cursor_get_column() + 1
+		var lineI = page.cursor_get_line()
+		var new_term = page.search(textToFind,0,lineI,colI)
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
+			select_term(new_term,textToFind)
+	if html.visible:
+		var colI = html.cursor_get_column() + 1
+		var lineI = html.cursor_get_line()
+		var new_term = html.search(textToFind,0,lineI,colI)
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
+			select_term(new_term,textToFind)
+	pass # Replace with function body.
+
+
+func _on_FindLast_pressed():
+	if page.visible:
+		var colI = page.cursor_get_column() - 1
+		var lineI = page.cursor_get_line()
+		var new_term = page.search(textToFind,TextEdit.SEARCH_BACKWARDS,lineI,colI)
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
+			select_term(new_term,textToFind)
+	if html.visible:
+		var colI = html.cursor_get_column() - 1
+		var lineI = html.cursor_get_line()
+		var new_term = html.search(textToFind,TextEdit.SEARCH_BACKWARDS,lineI,colI)
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
+			select_term(new_term,textToFind)
 	pass # Replace with function body.

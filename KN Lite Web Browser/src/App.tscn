@@ -459,14 +459,14 @@ margin_right = 958.0
 margin_bottom = 19.0
 text = "Matches: 0"
 
-[node name="Button" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+[node name="FindLast" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
 margin_left = 962.0
 margin_right = 984.0
 margin_bottom = 24.0
 disabled = true
 text = "/\\"
 
-[node name="Button2" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
+[node name="FindNext" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
 margin_left = 988.0
 margin_right = 1010.0
 margin_bottom = 24.0
@@ -501,4 +501,6 @@ margin_bottom = 40.0
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox3" to="." method="_on_CheckBox3_toggled"]
 [connection signal="text_changed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FinderLineEdit" to="." method="_on_FinderLineEdit_text_changed"]
+[connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast" to="." method="_on_FindLast_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext" to="." method="_on_FindNext_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
