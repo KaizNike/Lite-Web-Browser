@@ -85,6 +85,10 @@ func _on_LineEdit_text_entered(new_text):
 		return
 	paths.append(new_text)
 	currentSite = new_text
+	if currentSite in bookmarks:
+		$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "Unmark"
+	else:
+		$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "Mark"
 	pass # Replace with function body.
 
 
@@ -387,11 +391,16 @@ func _on_WrapBox_toggled(button_pressed):
 
 func _on_BookMarkButton_pressed():
 	if currentSite in bookmarks:
-		print("Already bookmarked.")
+		print(currentSite + " removed.")
+		Globals.emit_signal("deleteBookmark", currentSite)
+		bookmarks.erase(currentSite)
+#		print("Already bookmarked.")
+		$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "Mark"
 		return
 	print("Request started for bookmark.")
 	$ImageHTTPRequest.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + currentSite + "&size=16")
 	bookmarks.append(currentSite)
+	$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "Unmark"
 	pass # Replace with function body.
 
 
