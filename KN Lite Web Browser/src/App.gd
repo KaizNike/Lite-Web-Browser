@@ -61,8 +61,8 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 		html.text = Html
 		var check = currentSite.find("//")
 		var check2 = currentSite.find("/", check + 2)
-		if check2 != -1 and check2 > currentSite.length():
-			$BingHelp.site = currentSite.substr(0,currentSite.length() - check2)
+		if check2 != -1:
+			$BingHelp.site = currentSite.substr(0, check2)
 		else:
 			$BingHelp.site = currentSite
 		var search = $BingHelp.extract_text_and_links(Html)
@@ -377,6 +377,8 @@ func find_current_term(term, text, source):
 	var line_check = 0
 	for any_term_indx in range(termsAmt):
 		var next_term = source.search(text, 0, line_check, col_check)
+#		if next_term == -1:
+#			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termsAmt) + " of " + str(termsAmt)
 		line_check = next_term[TextEdit.SEARCH_RESULT_LINE]
 		col_check = next_term[TextEdit.SEARCH_RESULT_COLUMN]
 		if term[TextEdit.SEARCH_RESULT_COLUMN] == col_check and term[TextEdit.SEARCH_RESULT_LINE] == line_check:
@@ -482,6 +484,14 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 			panel.add_child(texture_rect)
 			img_vflow.add_child(panel)
+			
+			# Create a Popup
+#			var popup = PopupPanel.new()
+			var popup = WindowDialog.new()
+			self.add_child(popup)
+			
+			# Connect the "gui_input" signal of the panel to a function
+			panel.connect("gui_input", self, "_on_panel_clicked", [texture, popup])
 			# Fetch the next image
 			imgIndex += 1
 			fetch_next_image(imgIndex, images)
@@ -501,6 +511,14 @@ func bookmark_pressed(site):
 	else:
 		_on_LineEdit_text_entered(site)
 
+
+func _on_panel_clicked(event, texture, popup):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		var texture_rect = TextureRect.new()
+		texture_rect.texture = texture
+#		texture_rect.expand = true
+		popup.add_child(texture_rect)
+		popup.popup_centered()
 
 func _on_IconHTTPRequest_request_completed(result, response_code, headers, body):
 	if response_code == 200:
