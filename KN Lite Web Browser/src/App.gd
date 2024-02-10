@@ -1,9 +1,11 @@
 extends Node
 
 var paths = []
+var images = []
 var pathIndex = 0
 var currentSearch = "DDG"
 var currentMatch = 0
+var imgIndex = 0
 var currentSite = ""
 var matches = []
 var Match = {}
@@ -21,6 +23,8 @@ var bookmarks = []
 
 onready var text_page = $UI/VSplitContainer/TabContainer/Text
 onready var html = $UI/VSplitContainer/TabContainer/HTML
+onready var img_vflow = $UI/VSplitContainer/TabContainer/Images/VFlowContainer
+onready var http_img = $ImageHTTPRequest
 
 export (PackedScene) var new_bookmark
 
@@ -55,9 +59,22 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 	else:
 		var Html = body.get_string_from_utf8()
 		html.text = Html
+		var check = currentSite.find("//")
+		var check2 = currentSite.find("/", check + 2)
+		if check2 != -1:
+			$BingHelp.site = currentSite.substr(0,currentSite.length() - check2)
+		else:
+			$BingHelp.site = currentSite
 		var search = $BingHelp.extract_text_and_links(Html)
+		images = search["images"]
+		imgIndex = 0
+		
+		for chile in img_vflow.get_children():
+			img_vflow.remove_child(chile)
 		text_page.text = str(search).percent_decode()
 		#NEW
+		if images.size() > 0:
+			fetch_next_image(imgIndex, images)
 		print("Loaded")
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loaded")
 		pathIndex += 1
@@ -110,6 +127,9 @@ func _on_Button3_pressed():
 	elif currentSearch == "AO3":
 		print("Reading about it on A03")
 		search_term = "https://archiveofourown.org/works/search?work_search%5Bquery%5D=" + query
+	elif currentSearch == "OV":
+		print("Looking up images on OpenVerse.")
+		search_term = "https://openverse.org/search/?q=" + query
 	else:
 		text_page.text = "No search selected."
 		html.text = "No html from search not selected."
@@ -145,6 +165,7 @@ func _on_CheckBox_toggled(button_pressed):
 	if button_pressed:
 		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
 		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "DDG"
 	else:
 		currentSearch = ""
@@ -155,6 +176,7 @@ func _on_CheckBox2_toggled(button_pressed):
 	if button_pressed:
 		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
 		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "Wiki"
 	else:
 		currentSearch = ""
@@ -165,6 +187,7 @@ func _on_CheckBox3_toggled(button_pressed):
 	if button_pressed:
 		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
 		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "AO3"
 	else:
 		currentSearch = ""
@@ -364,6 +387,19 @@ func find_current_term(term, text, source):
 	$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termCurrent) + " of " + str(termsAmt)
 
 
+#IMAGE
+func fetch_next_image(indx, list):
+	if indx < list.size() and list.size() > 0:
+		var url = list[indx]
+		var error = $ImageHTTPRequest.request(url)
+		if error != OK:
+			print("Img Error:" + str(error))
+			imgIndex += 1
+			fetch_next_image(imgIndex, list)
+			pass
+	pass
+
+
 func _on_FindNext_pressed():
 	if text_page.visible:
 		var colI = text_page.cursor_get_column() + 1
@@ -426,7 +462,36 @@ func _on_BookMarkButton_pressed():
 
 
 func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body):
-	pass
+	if result == OK:
+		var image = Image.new()
+		var error = image.load_png_from_buffer(body)
+		if error != OK:
+			error = image.load_webp_from_buffer(body)
+		if error != OK:
+			error = image.load_jpg_from_buffer(body)
+		if error == OK:
+			var texture = ImageTexture.new()
+			texture.create_from_image(image)
+			var panel = PanelContainer.new()
+#			panel.rect_min_size = Vector2(200, 200)  # Set a minimum size
+			var texture_rect = TextureRect.new()
+			texture_rect.texture = texture
+			var size = texture.get_size()
+			panel.rect_min_size = Vector2(int(size.x)%200,int(size.y)%200)
+			texture_rect.expand = true
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+			panel.add_child(texture_rect)
+			img_vflow.add_child(panel)
+			# Fetch the next image
+			imgIndex += 1
+			fetch_next_image(imgIndex, images)
+		else:
+			print("Failed to load image: ", error)
+			imgIndex += 1
+			fetch_next_image(imgIndex, images)
+	else:
+		print("HTTP request failed: ", result)
+		
 
 func bookmark_pressed(site):
 	if site == currentSite:
@@ -452,4 +517,15 @@ func _on_IconHTTPRequest_request_completed(result, response_code, headers, body)
 	else:
 		print(response_code)
 	pass # Replace with function body.
+	pass # Replace with function body.
+
+
+func _on_OpenVerse_toggled(button_pressed):
+	if button_pressed:
+		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
+		currentSearch = "OV"
+	else:
+		currentSearch = ""
 	pass # Replace with function body.

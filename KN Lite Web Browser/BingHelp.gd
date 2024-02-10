@@ -1,9 +1,12 @@
 extends Node
 
+var site = ""
+
 func _ready():
 	var html = "<p>Welcome!</br>Hope you enjoy your stay!</p>\n<p>This is a <a href='https://www.example.com'>link</a> to an example website.</p>"
 	var result = extract_text_and_links(html)
 	print(result)
+	pass
 
 func extract_text_and_links(html: String) -> Dictionary:
 	var result = {
@@ -63,6 +66,9 @@ func extract_text_and_links(html: String) -> Dictionary:
 						var end_quote_index = tag.find(quote_char, src_index + 1)
 						if end_quote_index != -1:
 							var text = tag.substr(src_index + 1, end_quote_index - src_index - 1)
+							var look = text.find("/")
+							if look == 0:
+								text = site + text
 							result["images"].append(text)
 					pass
 				start_index = close_tag_index + 1
