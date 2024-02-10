@@ -547,6 +547,7 @@ text = "X"
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
+use_threads = true
 
 [node name="IconHTTPRequest" type="HTTPRequest" parent="."]
 

@@ -61,7 +61,7 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 		html.text = Html
 		var check = currentSite.find("//")
 		var check2 = currentSite.find("/", check + 2)
-		if check2 != -1:
+		if check2 != -1 and check2 > currentSite.length():
 			$BingHelp.site = currentSite.substr(0,currentSite.length() - check2)
 		else:
 			$BingHelp.site = currentSite
@@ -129,7 +129,7 @@ func _on_Button3_pressed():
 		search_term = "https://archiveofourown.org/works/search?work_search%5Bquery%5D=" + query
 	elif currentSearch == "OV":
 		print("Looking up images on OpenVerse.")
-		search_term = "https://openverse.org/search/?q=" + query
+		search_term = "https://yandex.com/images/search?text=" + query
 	else:
 		text_page.text = "No search selected."
 		html.text = "No html from search not selected."
@@ -491,6 +491,8 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			fetch_next_image(imgIndex, images)
 	else:
 		print("HTTP request failed: ", result)
+		imgIndex += 1
+		fetch_next_image(imgIndex, images)
 		
 
 func bookmark_pressed(site):

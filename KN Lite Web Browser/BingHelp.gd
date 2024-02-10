@@ -69,6 +69,10 @@ func extract_text_and_links(html: String) -> Dictionary:
 							var look = text.find("/")
 							if look == 0:
 								text = site + text
+							else:
+								look = text.find("h")
+								if look != 0:
+									text = site + "/" + text
 							result["images"].append(text)
 					pass
 				start_index = close_tag_index + 1
