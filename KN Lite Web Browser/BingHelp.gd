@@ -8,7 +8,8 @@ func _ready():
 func extract_text_and_links(html: String) -> Dictionary:
 	var result = {
 		"text": "",
-		"links": []
+		"links": [],
+		"images": []
 	}
 	var start_index = 0
 	while true:
@@ -31,9 +32,16 @@ func extract_text_and_links(html: String) -> Dictionary:
 						var end_quote_index = tag.find(quote_char, href_index + 1)
 						if end_quote_index != -1:
 							var link = tag.substr(href_index + 1, end_quote_index - href_index - 1)
-							result["links"].append(link)
-				elif tag.begins_with("style") or tag.begins_with("script"):
-					var end_tag = "</" + tag + ">"
+							result["links"].append("Link " + str(result["links"].size() + 1) + " :" + link)
+							result["text"] += "Link " + str(result["links"].size() + 1)
+				elif tag.begins_with("style"):
+					var end_tag = "</style>"
+					var end_tag_index = html.find(end_tag, close_tag_index)
+					if end_tag_index != -1:
+						start_index = end_tag_index + end_tag.length()
+						continue
+				elif tag.begins_with("script"):
+					var end_tag = "</script>"
 					var end_tag_index = html.find(end_tag, close_tag_index)
 					if end_tag_index != -1:
 						start_index = end_tag_index + end_tag.length()
@@ -41,6 +49,7 @@ func extract_text_and_links(html: String) -> Dictionary:
 					pass
 				elif tag.begins_with("img "):
 					var alt_index = tag.find("alt=")
+					var src_index = tag.find("src=")
 					if alt_index != -1:
 						alt_index += 4
 						var quote_char = tag[ alt_index ]
@@ -48,7 +57,13 @@ func extract_text_and_links(html: String) -> Dictionary:
 						if end_quote_index != -1:
 							var text = tag.substr(alt_index + 1, end_quote_index - alt_index - 1)
 							result["text"] += text
-					
+					if src_index != -1:
+						src_index += 4
+						var quote_char = tag[ src_index ]
+						var end_quote_index = tag.find(quote_char, src_index + 1)
+						if end_quote_index != -1:
+							var text = tag.substr(src_index + 1, end_quote_index - src_index - 1)
+							result["images"].append(text)
 					pass
 				start_index = close_tag_index + 1
 	return result

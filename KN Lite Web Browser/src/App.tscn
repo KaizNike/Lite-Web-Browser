@@ -335,9 +335,15 @@ margin_bottom = 32.0
 shortcut = SubResource( 2 )
 text = "X"
 
-[node name="ProgressText" type="TextureRect" parent="UI/VSplitContainer/HBoxContainer"]
+[node name="BookMarkButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 margin_left = 199.0
-margin_right = 231.0
+margin_right = 258.0
+margin_bottom = 32.0
+text = "*Mark*"
+
+[node name="ProgressText" type="TextureRect" parent="UI/VSplitContainer/HBoxContainer"]
+margin_left = 262.0
+margin_right = 294.0
 margin_bottom = 32.0
 texture = SubResource( 4 )
 stretch_mode = 2
@@ -350,37 +356,31 @@ anims/loaded = SubResource( 6 )
 anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 235.0
-margin_right = 697.0
+margin_left = 298.0
+margin_right = 744.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 701.0
-margin_right = 737.0
+margin_left = 748.0
+margin_right = 784.0
 margin_bottom = 32.0
 text = "==>"
 
 [node name="FindButtonPrv" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-margin_left = 822.0
-margin_right = 842.0
+margin_left = 650.0
+margin_right = 670.0
 margin_bottom = 32.0
 disabled = true
 text = "<"
 
 [node name="FindButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-margin_left = 721.0
-margin_right = 760.0
+margin_left = 674.0
+margin_right = 713.0
 margin_bottom = 32.0
 text = "Find"
-
-[node name="BookMarkButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-margin_left = 741.0
-margin_right = 784.0
-margin_bottom = 32.0
-text = "Mark"
 
 [node name="FindButtonNxt" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
@@ -429,7 +429,8 @@ margin_right = 1024.0
 margin_bottom = 558.0
 size_flags_vertical = 3
 
-[node name="Page" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
+[node name="Text" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -439,6 +440,16 @@ margin_bottom = -4.0
 bookmark_gutter = true
 wrap_enabled = true
 minimap_draw = true
+
+[node name="Images" type="ScrollContainer" parent="UI/VSplitContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="VFlowContainer" type="VFlowContainer" parent="UI/VSplitContainer/TabContainer/Images"]
 
 [node name="HTML" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 visible = false
@@ -509,6 +520,8 @@ text = "X"
 
 [node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
 
+[node name="IconHTTPRequest" type="HTTPRequest" parent="."]
+
 [node name="BingHelp" parent="." instance=ExtResource( 2 )]
 
 [node name="Popup" type="Popup" parent="."]
@@ -519,11 +532,11 @@ margin_bottom = 40.0
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button5" to="." method="_on_Button5_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button6" to="." method="_on_Button6_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
+[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/BookMarkButton" to="." method="_on_BookMarkButton_pressed"]
 [connection signal="text_entered" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonPrv" to="." method="_on_FindButtonPrv_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButton" to="." method="_on_FindButton_pressed"]
-[connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/BookMarkButton" to="." method="_on_BookMarkButton_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonNxt" to="." method="_on_FindButtonNxt_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
@@ -534,3 +547,4 @@ margin_bottom = 40.0
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext" to="." method="_on_FindNext_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
 [connection signal="request_completed" from="ImageHTTPRequest" to="." method="_on_ImageHTTPRequest_request_completed"]
+[connection signal="request_completed" from="IconHTTPRequest" to="." method="_on_IconHTTPRequest_request_completed"]
