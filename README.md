@@ -1,5 +1,5 @@
 # Lite Web Browser
-## For Godot 3.6
+## For Godot 3.5.2
 Made with: [Emi's Tutorial](https://www.youtube.com/watch?v=URszvAXXzFs)
  
 ![](KNWEB1.png)
