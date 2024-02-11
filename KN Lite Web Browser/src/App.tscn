@@ -440,7 +440,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Text" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -452,6 +451,7 @@ wrap_enabled = true
 minimap_draw = true
 
 [node name="Images" type="ScrollContainer" parent="UI/VSplitContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0

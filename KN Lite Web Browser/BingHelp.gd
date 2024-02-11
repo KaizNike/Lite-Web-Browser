@@ -35,8 +35,8 @@ func extract_text_and_links(html: String) -> Dictionary:
 						var end_quote_index = tag.find(quote_char, href_index + 1)
 						if end_quote_index != -1:
 							var link = tag.substr(href_index + 1, end_quote_index - href_index - 1)
-							result["links"].append("Link " + str(result["links"].size() + 1) + " :" + link)
-							result["text"] += "Link " + str(result["links"].size() + 1)
+							result["links"].append("Link " + str(result["links"].size() + 1) + " : " + link)
+							result["text"] += "Link " + str(result["links"].size() + 1) + " : "
 				elif tag.begins_with("style"):
 					var end_tag = "</style>"
 					var end_tag_index = html.find(end_tag, close_tag_index)

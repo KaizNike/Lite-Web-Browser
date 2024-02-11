@@ -2,6 +2,8 @@ extends Node
 
 signal bookmarkClicked
 signal deleteBookmark
+
+var Version = [2,0,0]
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"

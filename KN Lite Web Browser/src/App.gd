@@ -1,5 +1,8 @@
 extends Node
 
+#NOTES
+# Bookmarks on ready working weird
+
 var paths = []
 var images = []
 var pathIndex = 0
@@ -10,6 +13,8 @@ var currentSite = ""
 var matches = []
 var Match = {}
 var Query = ""
+var readying = false
+var readyIndx = 0
 
 var terms = []
 var termsAmt = 0
@@ -17,6 +22,7 @@ var termCurrent = 0
 var textToFind = ""
 
 var bookmarks = []
+const saveLoc = "user://LWBdata.tres"
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -27,15 +33,30 @@ onready var img_vflow = $UI/VSplitContainer/TabContainer/Images/VFlowContainer
 onready var http_img = $ImageHTTPRequest
 
 export (PackedScene) var new_bookmark
+onready var Save = preload("res://src/save.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	readying = true
 	Globals.connect("bookmarkClicked",self,"bookmark_pressed")
+	var saveLoad = ResourceLoader.load(saveLoc)
+	if not saveLoad:
+		print("Load error.")
+	else:
+		bookmarks = saveLoad.bookmarks
+		for item in bookmarks: 
+			var request = HTTPRequest.new()
+			self.add_child(request)
+			request.connect("request_completed", self, "_on_IconHTTPRequest_request_completed")
+			request.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + item + "&size=16")
 	var menu1 = text_page.get_menu()
 	var menu2 = html.get_menu()
 	var init = "https://godotengine.org"
-	$UI/VSplitContainer/HBoxContainer/LineEdit.text = "https://godotengine.org"
-	currentSite = "https://godotengine.org"
+	if bookmarks:
+		init = bookmarks[0]
+		$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "-Unmark-"
+	$UI/VSplitContainer/HBoxContainer/LineEdit.text = init
+	currentSite = init
 	_on_LineEdit_text_entered(init)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -445,6 +466,8 @@ func _on_WrapBox_toggled(button_pressed):
 	else:
 		text_page.wrap_enabled = false
 		html.wrap_enabled = false
+	text_page.update()
+	html.update()
 	pass # Replace with function body.
 
 
@@ -453,14 +476,26 @@ func _on_BookMarkButton_pressed():
 		print(currentSite + " removed.")
 		Globals.emit_signal("deleteBookmark", currentSite)
 		bookmarks.erase(currentSite)
+		save()
 #		print("Already bookmarked.")
 		$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "*Mark*"
 		return
 	print("Request started for bookmark.")
 	$IconHTTPRequest.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + currentSite + "&size=16")
 	bookmarks.append(currentSite)
+	save()
 	$UI/VSplitContainer/HBoxContainer/BookMarkButton.text = "-Unmark-"
 	pass # Replace with function body.
+
+
+func save():
+	var new_save = Save.new()
+	new_save.bookmarks = bookmarks.duplicate(true)
+	new_save.version = Globals.Version.duplicate(true)
+	var error = ResourceSaver.save(saveLoc, new_save)
+	if error != OK:
+		print(error)
+	pass
 
 
 func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body):
@@ -509,6 +544,7 @@ func bookmark_pressed(site):
 	if site == currentSite:
 		return
 	else:
+		$UI/VSplitContainer/HBoxContainer/LineEdit.text = site
 		_on_LineEdit_text_entered(site)
 
 
@@ -525,6 +561,8 @@ func _on_IconHTTPRequest_request_completed(result, response_code, headers, body)
 #		$UI/VSplitContainer/HBoxContainer/BookMarkButton.texture_normal = body
 		var bookMarkInstance = new_bookmark.instance()
 		bookMarkInstance.site = currentSite
+		if readying:
+			bookMarkInstance.site = bookmarks[readyIndx]
 		var image = Image.new()
 		var err = image.load_png_from_buffer(body)
 		if err == OK:
@@ -536,6 +574,10 @@ func _on_IconHTTPRequest_request_completed(result, response_code, headers, body)
 			print("Failed to load image from buffer." + str(err))
 	else:
 		print(response_code)
+	if readying:
+		readyIndx += 1
+		if readyIndx == bookmarks.size():
+			readying = false
 	pass # Replace with function body.
 	pass # Replace with function body.
 
