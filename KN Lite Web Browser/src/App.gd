@@ -511,12 +511,18 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			texture.create_from_image(image)
 			var panel = PanelContainer.new()
 #			panel.rect_min_size = Vector2(200, 200)  # Set a minimum size
-			var texture_rect = TextureRect.new()
-			texture_rect.texture = texture
+#			var texture_rect = TextureRect.new()
+#			texture_rect.texture = texture
 			var size = texture.get_size()
-			panel.rect_min_size = Vector2(int(size.x)%200,int(size.y)%200)
+#			panel.rect_min_size = Vector2(int(size.x)%200,int(size.y)%200)
+			var texture_rect = TextureRect.new()
+			texture_rect.rect_min_size = Vector2(150,75)
+			texture_rect.texture = texture
 			texture_rect.expand = true
-			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+#			panel.add_child(texture_rect)
+#			texture_rect.expand = true
+#			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 			panel.add_child(texture_rect)
 			img_vflow.add_child(panel)
 			
@@ -534,6 +540,7 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			print("Failed to load image: ", error)
 			imgIndex += 1
 			fetch_next_image(imgIndex, images)
+		img_vflow.rect_min_size = img_vflow.get_combined_minimum_size()
 	else:
 		print("HTTP request failed: ", result)
 		imgIndex += 1
