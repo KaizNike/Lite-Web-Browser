@@ -1,6 +1,9 @@
 extends Node
 
+signal bookmarkClicked
+signal deleteBookmark
 
+var Version = [2,0,0]
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -8,7 +11,9 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var test = "spaces are bad mkay"
-	print("1: " + test)
-	print(test.uri_encode())
 	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass

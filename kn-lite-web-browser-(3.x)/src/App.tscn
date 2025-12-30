@@ -1,518 +1,548 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2mhmqekaevti"]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource type="Script" uid="uid://b5tkit38a3ie6" path="res://src/App.gd" id="1"]
-[ext_resource type="PackedScene" path="res://src/BingHelp.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://src/BookMark.tscn" id="3"]
-[ext_resource type="Script" uid="uid://b0rveep6nxmha" path="res://src/page.gd" id="3_0jhyc"]
-[ext_resource type="Texture2D" uid="uid://dopkcjn6momcd" path="res://icon.png" id="4"]
+[ext_resource path="res://src/App.gd" type="Script" id=1]
+[ext_resource path="res://src/BingHelp.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/BookMark.tscn" type="PackedScene" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
 
-[sub_resource type="Shortcut" id="2"]
+[sub_resource type="InputEventAction" id=1]
+action = "refresh"
 
-[sub_resource type="FastNoiseLite" id="3"]
-offset = Vector3(12, 6, 0)
+[sub_resource type="ShortCut" id=2]
+shortcut = SubResource( 1 )
 
-[sub_resource type="NoiseTexture2D" id="4"]
+[sub_resource type="OpenSimplexNoise" id=3]
+period = 37.2
+
+[sub_resource type="NoiseTexture" id=4]
 width = 32
 height = 32
-noise = SubResource("3")
+noise = SubResource( 3 )
+noise_offset = Vector2( 12, 6 )
 
-[sub_resource type="Animation" id="5"]
+[sub_resource type="Animation" id=5]
 length = 0.001
 tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/path = NodePath(".:self_modulate:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/path = NodePath(".:self_modulate:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/path = NodePath(".:self_modulate:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/path = NodePath(".:self_modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:texture:noise:offset:x")
+tracks/4/path = NodePath(".:texture:noise_offset:x")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
 tracks/4/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(12, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 12, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:texture:noise:offset:y")
+tracks/5/path = NodePath(".:texture:noise_offset:y")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
 tracks/5/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(6, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
+"points": PoolRealArray( 6, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
 
-[sub_resource type="Animation" id="9"]
+[sub_resource type="Animation" id=9]
 resource_name = "cancel"
 tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/path = NodePath(".:self_modulate:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(1)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
 }
 tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/path = NodePath(".:self_modulate:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(1)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
 }
 tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/path = NodePath(".:self_modulate:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(1)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
 }
 tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/path = NodePath(".:self_modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(1)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1 )
 }
 
-[sub_resource type="Animation" id="7"]
+[sub_resource type="Animation" id=7]
 resource_name = "failed"
 length = 0.3
 tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/path = NodePath(".:self_modulate:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0.968415, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 0.968415, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/path = NodePath(".:self_modulate:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/path = NodePath(".:self_modulate:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0.975847, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 0.975847, -0.25, 0, 0.25, 0, 0.301961, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/path = NodePath(".:self_modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 
-[sub_resource type="Animation" id="6"]
+[sub_resource type="Animation" id=6]
 resource_name = "loaded"
 length = 0.3
 tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/path = NodePath(".:self_modulate:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.666667, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.666667, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/path = NodePath(".:self_modulate:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/path = NodePath(".:self_modulate:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.745098, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.745098, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/path = NodePath(".:self_modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
 }
 
-[sub_resource type="Animation" id="8"]
+[sub_resource type="Animation" id=8]
 resource_name = "loading"
 length = 0.6
-loop_mode = 1
+loop = true
 tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/path = NodePath(".:self_modulate:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.654902, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.654902, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/path = NodePath(".:self_modulate:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.556863, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.556863, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/path = NodePath(".:self_modulate:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.262745, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 0.262745, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/path = NodePath(".:self_modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
+"points": PoolRealArray( 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:texture:noise:offset:x")
+tracks/4/path = NodePath(".:texture:noise_offset:x")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
 tracks/4/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 12, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 12, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:texture:noise:offset:y")
+tracks/5/path = NodePath(".:texture:noise_offset:y")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
 tracks/5/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 6, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.3, 0.6)
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_75s1g"]
-_data = {
-&"RESET": SubResource("5"),
-&"cancel": SubResource("9"),
-&"failed": SubResource("7"),
-&"loaded": SubResource("6"),
-&"loading": SubResource("8")
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 6, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3, 0.6 )
 }
 
 [node name="App" type="Node"]
-script = ExtResource("1")
-new_bookmark = ExtResource("3")
+script = ExtResource( 1 )
+new_bookmark = ExtResource( 3 )
 
 [node name="UI" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VSplitContainer" type="VBoxContainer" parent="UI"]
-layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/VSplitContainer"]
-layout_mode = 2
+margin_right = 1024.0
+margin_bottom = 32.0
 
 [node name="MenuButton" type="MenuButton" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_right = 48.0
+margin_bottom = 32.0
 text = "Menu"
 
 [node name="WrapBox" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 52.0
+margin_right = 113.0
+margin_bottom = 32.0
+pressed = true
 text = "Wrap"
 
 [node name="Button2" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
-shortcut = SubResource("2")
+margin_left = 52.0
+margin_right = 79.0
+margin_bottom = 24.0
+shortcut = SubResource( 2 )
 text = "F5"
 
 [node name="Button5" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
-shortcut = SubResource("2")
+margin_left = 117.0
+margin_right = 142.0
+margin_bottom = 32.0
+shortcut = SubResource( 2 )
 text = "<-"
 
 [node name="Button6" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
-shortcut = SubResource("2")
+margin_left = 146.0
+margin_right = 171.0
+margin_bottom = 32.0
+shortcut = SubResource( 2 )
 text = "->"
 
 [node name="Button4" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
-shortcut = SubResource("2")
+margin_left = 175.0
+margin_right = 195.0
+margin_bottom = 32.0
+shortcut = SubResource( 2 )
 text = "X"
 
 [node name="BookMarkButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 199.0
+margin_right = 258.0
+margin_bottom = 32.0
 text = "*Mark*"
 
 [node name="ProgressText" type="TextureRect" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
-texture = SubResource("4")
+margin_left = 262.0
+margin_right = 294.0
+margin_bottom = 32.0
+texture = SubResource( 4 )
 stretch_mode = 2
 
 [node name="ProgressAnim" type="AnimationPlayer" parent="UI/VSplitContainer/HBoxContainer/ProgressText"]
-libraries = {
-&"": SubResource("AnimationLibrary_75s1g")
-}
+anims/RESET = SubResource( 5 )
+anims/cancel = SubResource( 9 )
+anims/failed = SubResource( 7 )
+anims/loaded = SubResource( 6 )
+anims/loading = SubResource( 8 )
 
 [node name="LineEdit" type="LineEdit" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 298.0
+margin_right = 744.0
+margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 748.0
+margin_right = 784.0
+margin_bottom = 32.0
 text = "==>"
 
 [node name="FindButtonPrv" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
+margin_left = 650.0
+margin_right = 670.0
+margin_bottom = 32.0
 disabled = true
 text = "<"
 
 [node name="FindButton" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
+margin_left = 674.0
+margin_right = 713.0
+margin_bottom = 32.0
 text = "Find"
 
 [node name="FindButtonNxt" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
+margin_left = 764.0
+margin_right = 784.0
+margin_bottom = 32.0
 disabled = true
 text = ">"
 
 [node name="Button3" type="Button" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 788.0
+margin_right = 842.0
+margin_bottom = 32.0
 text = "Search"
 
 [node name="CheckBox" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 846.0
+margin_right = 904.0
+margin_bottom = 32.0
+pressed = true
 text = "DDG"
 
 [node name="OpenVerse" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
+margin_left = 857.0
+margin_right = 904.0
+margin_bottom = 32.0
 text = "OV"
 
 [node name="CheckBox2" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 908.0
+margin_right = 964.0
+margin_bottom = 32.0
 text = "Wiki"
 
 [node name="CheckBox3" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 968.0
+margin_right = 1024.0
+margin_bottom = 32.0
 text = "AO3"
 
 [node name="BookMarksBar" type="HBoxContainer" parent="UI/VSplitContainer"]
-layout_mode = 2
+margin_top = 36.0
+margin_right = 1024.0
+margin_bottom = 36.0
 
-[node name="BookMark" parent="UI/VSplitContainer/BookMarksBar" instance=ExtResource("3")]
+[node name="BookMark" parent="UI/VSplitContainer/BookMarksBar" instance=ExtResource( 3 )]
 visible = false
-layout_mode = 2
 
 [node name="TabContainer" type="TabContainer" parent="UI/VSplitContainer"]
-clip_contents = true
-layout_mode = 2
+margin_top = 40.0
+margin_right = 1024.0
+margin_bottom = 558.0
+rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
-
-[node name="Page" type="HFlowContainer" parent="UI/VSplitContainer/TabContainer"]
-layout_mode = 2
-script = ExtResource("3_0jhyc")
-metadata/_tab_index = 0
-
-[node name="Label" type="Label" parent="UI/VSplitContainer/TabContainer/Page"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Johnny rebance."
-autowrap_mode = 3
 
 [node name="Text" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
-visible = false
-layout_mode = 2
-wrap_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+bookmark_gutter = true
+wrap_enabled = true
 minimap_draw = true
-metadata/_tab_index = 1
-
-[node name="Links" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
-visible = false
-layout_mode = 2
-wrap_mode = 1
-metadata/_tab_index = 2
 
 [node name="Images" type="ScrollContainer" parent="UI/VSplitContainer/TabContainer"]
 visible = false
-layout_mode = 2
-metadata/_tab_index = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+scroll_horizontal_enabled = false
 
 [node name="VFlowContainer" type="HFlowContainer" parent="UI/VSplitContainer/TabContainer/Images"]
-layout_mode = 2
+margin_right = 1016.0
+margin_bottom = 482.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/VSplitContainer/TabContainer/Images/VFlowContainer"]
 visible = false
-layout_mode = 2
+margin_right = 14.0
+margin_bottom = 14.0
 
 [node name="TextureRect" type="TextureRect" parent="UI/VSplitContainer/TabContainer/Images/VFlowContainer/PanelContainer"]
-layout_mode = 2
-texture = ExtResource("4")
-expand_mode = 1
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 7.0
+margin_bottom = 7.0
+texture = ExtResource( 4 )
+expand = true
 stretch_mode = 5
 
 [node name="HTML" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 visible = false
-layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 text = "<html></html>"
+bookmark_gutter = true
+wrap_enabled = true
 minimap_draw = true
-metadata/_tab_index = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/VSplitContainer"]
-layout_mode = 2
+margin_top = 562.0
+margin_right = 1024.0
+margin_bottom = 600.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/VSplitContainer/PanelContainer"]
-layout_mode = 2
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 31.0
 
 [node name="Label" type="Label" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
+margin_top = 5.0
+margin_right = 81.0
+margin_bottom = 19.0
 text = "Find in page:"
 
 [node name="FinderLineEdit" type="LineEdit" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
+margin_left = 85.0
+margin_right = 884.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
 
 [node name="TermsAmt" type="Label" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 888.0
+margin_top = 5.0
+margin_right = 958.0
+margin_bottom = 19.0
 text = "Matches: 0"
 
 [node name="FindLast" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 962.0
+margin_right = 984.0
+margin_bottom = 24.0
 disabled = true
 text = "/\\"
 
 [node name="FindNext" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
+margin_left = 988.0
+margin_right = 1010.0
+margin_bottom = 24.0
 disabled = true
 text = "\\/"
 
 [node name="Button3" type="Button" parent="UI/VSplitContainer/PanelContainer/HBoxContainer"]
 visible = false
-layout_mode = 2
+margin_left = 990.0
+margin_right = 1010.0
+margin_bottom = 24.0
 text = "X"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
@@ -522,32 +552,36 @@ use_threads = true
 
 [node name="IconHTTPRequest" type="HTTPRequest" parent="."]
 
-[node name="BingHelp" parent="." instance=ExtResource("2")]
+[node name="BingHelp" parent="." instance=ExtResource( 2 )]
 
-[node name="Popup" type="Window" parent="."]
-oversampling_override = 1.0
-position = Vector2i(0, 36)
+[node name="Popup" type="WindowDialog" parent="."]
+visible = true
+margin_left = 454.0
+margin_top = 219.0
+margin_right = 502.0
+margin_bottom = 259.0
+resizable = true
 
 [node name="TextureRect" type="TextureRect" parent="Popup"]
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("4")
-expand_mode = 1
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 4 )
+expand = true
 
-[node name="ImgPop" type="Window" parent="."]
-oversampling_override = 1.0
-position = Vector2i(0, 36)
+[node name="ImgPop" type="WindowDialog" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+resizable = true
 
 [node name="TextureRect" type="TextureRect" parent="ImgPop"]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-texture = ExtResource("4")
-expand_mode = 1
+margin_left = 4.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = -4.0
+texture = ExtResource( 4 )
+expand = true
 stretch_mode = 1
 
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/WrapBox" to="." method="_on_WrapBox_toggled"]
@@ -555,7 +589,7 @@ stretch_mode = 1
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button6" to="." method="_on_Button6_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/BookMarkButton" to="." method="_on_BookMarkButton_pressed"]
-[connection signal="text_submitted" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="text_entered" from="UI/VSplitContainer/HBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButtonPrv" to="." method="_on_FindButtonPrv_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/HBoxContainer/FindButton" to="." method="_on_FindButton_pressed"]
@@ -565,7 +599,6 @@ stretch_mode = 1
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/OpenVerse" to="." method="_on_OpenVerse_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox3" to="." method="_on_CheckBox3_toggled"]
-[connection signal="resized" from="UI/VSplitContainer/TabContainer/Page" to="UI/VSplitContainer/TabContainer/Page" method="_on_resized"]
 [connection signal="text_changed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FinderLineEdit" to="." method="_on_FinderLineEdit_text_changed"]
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast" to="." method="_on_FindLast_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext" to="." method="_on_FindNext_pressed"]

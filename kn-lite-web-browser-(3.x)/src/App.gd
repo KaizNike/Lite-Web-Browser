@@ -27,19 +27,18 @@ const saveLoc = "user://LWBdata.tres"
 # var a = 2
 # var b = "text"
 
-@onready var text_page = $UI/VSplitContainer/TabContainer/Text
-@onready var links_page = $UI/VSplitContainer/TabContainer/Links
-@onready var html = $UI/VSplitContainer/TabContainer/HTML
-@onready var img_vflow = $UI/VSplitContainer/TabContainer/Images/VFlowContainer
-@onready var http_img = $ImageHTTPRequest
+onready var text_page = $UI/VSplitContainer/TabContainer/Text
+onready var html = $UI/VSplitContainer/TabContainer/HTML
+onready var img_vflow = $UI/VSplitContainer/TabContainer/Images/VFlowContainer
+onready var http_img = $ImageHTTPRequest
 
-@export var new_bookmark: PackedScene
-@onready var Save = preload("res://src/save.gd")
+export (PackedScene) var new_bookmark
+onready var Save = preload("res://src/save.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	readying = true
-	Globals.connect("bookmarkClicked", Callable(self, "bookmark_pressed"))
+	Globals.connect("bookmarkClicked",self,"bookmark_pressed")
 	var saveLoad = ResourceLoader.load(saveLoc)
 	if not saveLoad:
 		print("Load error.")
@@ -48,7 +47,7 @@ func _ready():
 		for item in bookmarks: 
 			var request = HTTPRequest.new()
 			self.add_child(request)
-			request.connect("request_completed", Callable(self, "_on_IconHTTPRequest_request_completed"))
+			request.connect("request_completed", self, "_on_IconHTTPRequest_request_completed")
 			request.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + item + "&size=16")
 	var menu1 = text_page.get_menu()
 	var menu2 = html.get_menu()
@@ -74,7 +73,6 @@ func parse(Html):
 func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 	if response_code != 200:
 		text_page.text = "Error: " + str(response_code)
-		links_page.text = "Error: " + str(response_code)
 		html.text = "Error: " + str(response_code)
 #		return("HTTP Response: " + str(response_code))
 		print(response_code)
@@ -94,8 +92,7 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 		
 		for chile in img_vflow.get_children():
 			img_vflow.remove_child(chile)
-		text_page.text = str(search.text).uri_decode()
-		links_page.text = str(search.links).uri_decode()
+		text_page.text = str(search).percent_decode()
 		#NEW
 		if images.size() > 0:
 			fetch_next_image(imgIndex, images)
@@ -140,11 +137,11 @@ func _on_Button_pressed():
 
 
 func _on_Button3_pressed():
-	var query = $UI/VSplitContainer/HBoxContainer/LineEdit.text.uri_encode()
+	var query = $UI/VSplitContainer/HBoxContainer/LineEdit.text.http_escape()
 	var search_term = ""
 	if currentSearch == "DDG":
 		print("Searching with DDG! Quack.")
-		search_term = "https://duckduckgo.com/html/?q=" + query# uri_encode()
+		search_term = "https://duckduckgo.com/html/?q=" + query# percent_encode()
 	elif currentSearch == "Wiki":
 		print("Looking it up on Wiki Wiki-pedia")
 		search_term = "https://en.wikipedia.org/wiki/" + query
@@ -187,9 +184,9 @@ func _on_Button6_pressed():
 # DDG
 func _on_CheckBox_toggled(button_pressed):
 	if button_pressed:
-		$UI/VSplitContainer/HBoxContainer/CheckBox2.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/CheckBox3.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/OpenVerse.button_pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "DDG"
 	else:
 		currentSearch = ""
@@ -198,9 +195,9 @@ func _on_CheckBox_toggled(button_pressed):
 # Wiki
 func _on_CheckBox2_toggled(button_pressed):
 	if button_pressed:
-		$UI/VSplitContainer/HBoxContainer/CheckBox.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/CheckBox3.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/OpenVerse.button_pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "Wiki"
 	else:
 		currentSearch = ""
@@ -209,9 +206,9 @@ func _on_CheckBox2_toggled(button_pressed):
 # AO3
 func _on_CheckBox3_toggled(button_pressed):
 	if button_pressed:
-		$UI/VSplitContainer/HBoxContainer/CheckBox.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/CheckBox2.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/OpenVerse.button_pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
+		$UI/VSplitContainer/HBoxContainer/OpenVerse.pressed = false
 		currentSearch = "AO3"
 	else:
 		currentSearch = ""
@@ -261,13 +258,13 @@ func _on_FindButtonNxt_pressed():
 
 func select_term(loc, text):
 	if text_page.visible:
-		text_page.select(loc.y, loc.x, loc.y, loc.x + text.length())
-		text_page.set_caret_line(loc.y)
-		text_page.set_caret_column(loc.x)
+		text_page.select(loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN], loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN] + text.length())
+		text_page.cursor_set_line(loc[TextEdit.SEARCH_RESULT_LINE])
+		text_page.cursor_set_column(loc[TextEdit.SEARCH_RESULT_COLUMN])
 	if html.visible:
-		html.select(loc.y, loc.x, loc.y, loc.x + text.length())
-		html.set_caret_line(loc.y)
-		html.set_caret_column(loc.x)
+		html.select(loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN], loc[TextEdit.SEARCH_RESULT_LINE], loc[TextEdit.SEARCH_RESULT_COLUMN] + text.length())
+		html.cursor_set_line(loc[TextEdit.SEARCH_RESULT_LINE])
+		html.cursor_set_column(loc[TextEdit.SEARCH_RESULT_COLUMN])
 	pass
 
 
@@ -294,15 +291,15 @@ func _on_FinderLineEdit_text_changed(new_text):
 		var last_lineI = 0
 		var last_colI = 0
 		while new_term:
-			colI = new_term.x + new_text.length()
-			lineI = new_term.y
+			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
+			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
 			if lineI < last_lineI or (colI < last_colI and lineI == last_lineI):
 				break
 #			if lineI > 1:
 #				print(lineI)
 #			if lineI >= text_page.get_line_count() - 50:
 #				print(lineI)
-			text_page.set_line_as_bookmark(new_term.y, true)
+			text_page.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
 			termsAmt += 1
 			if colI >= text_page.get_line(lineI).length():
 				colI = 0
@@ -316,13 +313,13 @@ func _on_FinderLineEdit_text_changed(new_text):
 			last_colI = colI
 			new_term = text_page.search(new_text, 0, lineI, colI)
 		if termsAmt > 0:
-			colI = text_page.get_caret_column()
-			lineI = text_page.get_caret_line()
+			colI = text_page.cursor_get_column()
+			lineI = text_page.cursor_get_line()
 			new_term = text_page.search(new_text, 0, lineI, colI)
 			if not new_term:
 				new_term = text_page.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
-				colI = new_term.x
-				lineI = new_term.y
+				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN]
+				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
 			if new_term:
 				select_term(new_term, new_text)
 				find_current_term(new_term, new_text, text_page)
@@ -330,11 +327,11 @@ func _on_FinderLineEdit_text_changed(new_text):
 				if termsAmt > 1:
 					new_term = text_page.search(new_text, 0, lineI, colI + new_text.length())
 					if new_term:
-						if new_term.y >= lineI:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
 							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = false
 					new_term = text_page.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
 					if new_term:
-						if new_term.y <= lineI:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
 							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = false
 		else:
 			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(0)
@@ -348,15 +345,15 @@ func _on_FinderLineEdit_text_changed(new_text):
 		var last_lineI = 0
 		var last_colI = 0
 		while new_term:
-			colI = new_term.x + new_text.length()
-			lineI = new_term.y
+			colI = new_term[TextEdit.SEARCH_RESULT_COLUMN] + new_text.length()
+			lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
 			if lineI < last_lineI or (colI < last_colI and lineI == last_lineI):
 				break
 #			if lineI > 1:
 #				print(lineI)
 #			if lineI >= html.get_line_count() - 50:
 #				print(lineI)
-			html.set_line_as_bookmark(new_term.y, true)
+			html.set_line_as_bookmark(new_term[TextEdit.SEARCH_RESULT_LINE], true)
 			termsAmt += 1
 			if colI >= html.get_line(lineI).length():
 				colI = 0
@@ -370,13 +367,13 @@ func _on_FinderLineEdit_text_changed(new_text):
 			last_colI = colI
 			new_term = html.search(new_text, 0, lineI, colI)
 		if termsAmt > 0:
-			colI = html.get_caret_column()
-			lineI = html.get_caret_line()
+			colI = html.cursor_get_column()
+			lineI = html.cursor_get_line()
 			new_term = html.search(new_text, 0, lineI, colI)
 			if not new_term:
 				new_term = html.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
-				colI = new_term.x
-				lineI = new_term.y
+				colI = new_term[TextEdit.SEARCH_RESULT_COLUMN]
+				lineI = new_term[TextEdit.SEARCH_RESULT_LINE]
 			if new_term:
 				select_term(new_term, new_text)
 				find_current_term(new_term, new_text, html)
@@ -384,11 +381,11 @@ func _on_FinderLineEdit_text_changed(new_text):
 				if termsAmt > 1:
 					new_term = html.search(new_text, 0, lineI, colI + new_text.length())
 					if new_term:
-						if new_term.y >= lineI:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
 							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = false
 					new_term = html.search(new_text, TextEdit.SEARCH_BACKWARDS, lineI, colI)
 					if new_term:
-						if new_term.y <= lineI:
+						if new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
 							$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = false
 		else:
 			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(0)
@@ -403,9 +400,9 @@ func find_current_term(term, text, source):
 		var next_term = source.search(text, 0, line_check, col_check)
 #		if next_term == -1:
 #			$UI/VSplitContainer/PanelContainer/HBoxContainer/TermsAmt.text = "Matches:" + str(termsAmt) + " of " + str(termsAmt)
-		line_check = next_term.y
-		col_check = next_term.x
-		if term.x == col_check and term.y == line_check:
+		line_check = next_term[TextEdit.SEARCH_RESULT_LINE]
+		col_check = next_term[TextEdit.SEARCH_RESULT_COLUMN]
+		if term[TextEdit.SEARCH_RESULT_COLUMN] == col_check and term[TextEdit.SEARCH_RESULT_LINE] == line_check:
 			termCurrent = any_term_indx + 1
 			break
 		else:
@@ -428,17 +425,17 @@ func fetch_next_image(indx, list):
 
 func _on_FindNext_pressed():
 	if text_page.visible:
-		var colI = text_page.get_caret_column() + 1
-		var lineI = text_page.get_caret_line()
+		var colI = text_page.cursor_get_column() + 1
+		var lineI = text_page.cursor_get_line()
 		var new_term = text_page.search(textToFind,0,lineI,colI)
-		if new_term and new_term.y >= lineI:
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
 			select_term(new_term,textToFind)
 			find_current_term(new_term, textToFind, text_page)
 	if html.visible:
-		var colI = html.get_caret_column() + 1
-		var lineI = html.get_caret_line()
+		var colI = html.cursor_get_column() + 1
+		var lineI = html.cursor_get_line()
 		var new_term = html.search(textToFind,0,lineI,colI)
-		if new_term and new_term.y >= lineI:
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] >= lineI:
 			select_term(new_term,textToFind)
 			find_current_term(new_term, textToFind, html)
 	pass # Replace with function body.
@@ -446,17 +443,17 @@ func _on_FindNext_pressed():
 
 func _on_FindLast_pressed():
 	if text_page.visible:
-		var colI = text_page.get_caret_column() - 1
-		var lineI = text_page.get_caret_line()
+		var colI = text_page.cursor_get_column() - 1
+		var lineI = text_page.cursor_get_line()
 		var new_term = text_page.search(textToFind,TextEdit.SEARCH_BACKWARDS,lineI,colI)
-		if new_term and new_term.y <= lineI:
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
 			select_term(new_term,textToFind)
 			find_current_term(new_term, textToFind, text_page)
 	if html.visible:
-		var colI = html.get_caret_column() - 1
-		var lineI = html.get_caret_line()
+		var colI = html.cursor_get_column() - 1
+		var lineI = html.cursor_get_line()
 		var new_term = html.search(textToFind,TextEdit.SEARCH_BACKWARDS,lineI,colI)
-		if new_term and new_term.y <= lineI:
+		if new_term and new_term[TextEdit.SEARCH_RESULT_LINE] <= lineI:
 			select_term(new_term,textToFind)
 			find_current_term(new_term, textToFind, html)
 	pass # Replace with function body.
@@ -495,7 +492,7 @@ func save():
 	var new_save = Save.new()
 	new_save.bookmarks = bookmarks.duplicate(true)
 	new_save.version = Globals.Version.duplicate(true)
-	var error = ResourceSaver.save(new_save, saveLoc)
+	var error = ResourceSaver.save(saveLoc, new_save)
 	if error != OK:
 		print(error)
 	pass
@@ -504,31 +501,22 @@ func save():
 func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body):
 	if result == OK:
 		var image = Image.new()
-		var buffer = body
-		var error = image.load_bmp_from_buffer(buffer)
-		error = image.load_dds_from_buffer(buffer)
-		error = image.load_jpg_from_buffer(buffer)
-		error = image.load_ktx_from_buffer(buffer)
-		error = image.load_png_from_buffer(buffer)
-		error = image.load_svg_from_buffer(buffer, 1.0)
-		error = image.load_tga_from_buffer(buffer) 
-		error = image.load_webp_from_buffer(buffer)
-
-		#var error = image.load_png_from_buffer(body)
-		#if error != OK:
-			#error = image.load_webp_from_buffer(body)
-		#if error != OK:
-			#error = image.load_jpg_from_buffer(body)
+		var error = image.load_png_from_buffer(body)
+		if error != OK:
+			error = image.load_webp_from_buffer(body)
+		if error != OK:
+			error = image.load_jpg_from_buffer(body)
 		if error == OK:
-			var texture = ImageTexture.create_from_image(image)
+			var texture = ImageTexture.new()
+			texture.create_from_image(image)
 			var panel = PanelContainer.new()
 #			panel.rect_min_size = Vector2(200, 200)  # Set a minimum size
 #			var texture_rect = TextureRect.new()
 #			texture_rect.texture = texture
-			#var size = texture.get_size()
+			var size = texture.get_size()
 #			panel.rect_min_size = Vector2(int(size.x)%200,int(size.y)%200)
 			var texture_rect = TextureRect.new()
-			texture_rect.custom_minimum_size = Vector2(150,75)
+			texture_rect.rect_min_size = Vector2(150,75)
 			texture_rect.texture = texture
 			texture_rect.expand = true
 			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -540,11 +528,11 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			
 			# Create a Popup
 #			var popup = PopupPanel.new()
-			var popup = Window.new()
+			var popup = WindowDialog.new()
 			self.add_child(popup)
 			
 			# Connect the "gui_input" signal of the panel to a function
-			panel.connect("gui_input", Callable(self, "_on_panel_clicked").bind(texture, popup))
+			panel.connect("gui_input", self, "_on_panel_clicked", [texture, popup])
 			# Fetch the next image
 			imgIndex += 1
 			fetch_next_image(imgIndex, images)
@@ -552,7 +540,7 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			print("Failed to load image: ", error)
 			imgIndex += 1
 			fetch_next_image(imgIndex, images)
-		img_vflow.custom_minimum_size = img_vflow.get_combined_minimum_size()
+		img_vflow.rect_min_size = img_vflow.get_combined_minimum_size()
 	else:
 		print("HTTP request failed: ", result)
 		imgIndex += 1
@@ -568,7 +556,7 @@ func bookmark_pressed(site):
 
 
 func _on_panel_clicked(event, texture, popup):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		var texture_rect = TextureRect.new()
 		texture_rect.texture = texture
 #		texture_rect.expand = true
@@ -578,7 +566,7 @@ func _on_panel_clicked(event, texture, popup):
 func _on_IconHTTPRequest_request_completed(result, response_code, headers, body):
 	if response_code == 200:
 #		$UI/VSplitContainer/HBoxContainer/BookMarkButton.texture_normal = body
-		var bookMarkInstance = new_bookmark.instantiate()
+		var bookMarkInstance = new_bookmark.instance()
 		bookMarkInstance.site = currentSite
 		if readying:
 			bookMarkInstance.site = bookmarks[readyIndx]
@@ -603,9 +591,9 @@ func _on_IconHTTPRequest_request_completed(result, response_code, headers, body)
 
 func _on_OpenVerse_toggled(button_pressed):
 	if button_pressed:
-		$UI/VSplitContainer/HBoxContainer/CheckBox.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/CheckBox2.button_pressed = false
-		$UI/VSplitContainer/HBoxContainer/CheckBox3.button_pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox2.pressed = false
+		$UI/VSplitContainer/HBoxContainer/CheckBox3.pressed = false
 		currentSearch = "OV"
 	else:
 		currentSearch = ""

@@ -10,5 +10,5 @@ extends Node
 func _ready():
 	var test = "spaces are bad mkay"
 	print("1: " + test)
-	print(test.uri_encode())
+	print(test.percent_encode())
 	pass # Replace with function body.

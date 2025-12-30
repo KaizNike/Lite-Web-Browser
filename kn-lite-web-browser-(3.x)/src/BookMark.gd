@@ -8,7 +8,7 @@ var site = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Globals.connect("deleteBookmark", Callable(self, "delete"))
+	Globals.connect("deleteBookmark", self, "delete")
 	pass # Replace with function body.
 
 

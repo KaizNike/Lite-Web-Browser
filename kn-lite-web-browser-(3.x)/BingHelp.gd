@@ -60,24 +60,20 @@ func extract_text_and_links(html: String) -> Dictionary:
 						if end_quote_index != -1:
 							var text = tag.substr(alt_index + 1, end_quote_index - alt_index - 1)
 							result["text"] += text
-#							Need to handle the fact the end quote got eaten here.
 					if src_index != -1:
 						src_index += 4
-						if tag[src_index] == "'" or tag[src_index] == '"':
-							src_index += 1
-						var end = tag.find(" ",src_index)
-						#var quote_char = tag[ src_index ]
-						#var end_quote_index = tag.find(quote_char, src_index + 1)
-						#if end_quote_index != -1:
-						var text = tag.substr(src_index, end - (src_index))
-						var look = text.find("/")
-						if look == 0:
-							text = site + text
-						else:
-							look = text.find("h")
-							if look != 0:
-								text = site + "/" + text
-						result["images"].append(text)
+						var quote_char = tag[ src_index ]
+						var end_quote_index = tag.find(quote_char, src_index + 1)
+						if end_quote_index != -1:
+							var text = tag.substr(src_index + 1, end_quote_index - src_index - 1)
+							var look = text.find("/")
+							if look == 0:
+								text = site + text
+							else:
+								look = text.find("h")
+								if look != 0:
+									text = site + "/" + text
+							result["images"].append(text)
 					pass
 				start_index = close_tag_index + 1
 	return result
