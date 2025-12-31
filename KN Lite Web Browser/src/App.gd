@@ -506,13 +506,27 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 		var image = Image.new()
 		var buffer = body
 		var error = image.load_bmp_from_buffer(buffer)
-		error = image.load_dds_from_buffer(buffer)
-		error = image.load_jpg_from_buffer(buffer)
-		error = image.load_ktx_from_buffer(buffer)
-		error = image.load_png_from_buffer(buffer)
-		error = image.load_svg_from_buffer(buffer, 1.0)
-		error = image.load_tga_from_buffer(buffer) 
-		error = image.load_webp_from_buffer(buffer)
+		if not error == OK:
+			
+			error = image.load_dds_from_buffer(buffer)
+		if not error == OK:
+			
+			error = image.load_jpg_from_buffer(buffer)
+		if not error == OK:
+			
+			error = image.load_ktx_from_buffer(buffer)
+		if not error == OK:
+			
+			error = image.load_png_from_buffer(buffer)
+		if not error == OK:
+			
+			error = image.load_svg_from_buffer(buffer, 1.0)
+		if not error == OK:
+			
+			error = image.load_tga_from_buffer(buffer) 
+		if not error == OK:
+			
+			error = image.load_webp_from_buffer(buffer)
 
 		#var error = image.load_png_from_buffer(body)
 		#if error != OK:
@@ -585,9 +599,8 @@ func _on_IconHTTPRequest_request_completed(result, response_code, headers, body)
 		var image = Image.new()
 		var err = image.load_png_from_buffer(body)
 		if err == OK:
-			var texture = ImageTexture.new()
-			texture.create_from_image(image)
-			bookMarkInstance.get_node("TextureBookMark").set_normal_texture(texture)
+			var texture = ImageTexture.create_from_image(image)
+			bookMarkInstance.get_node("TextureBookMark").texture_normal = texture
 			$UI/VSplitContainer/BookMarksBar.add_child(bookMarkInstance)
 		else:
 			print("Failed to load image from buffer." + str(err))
