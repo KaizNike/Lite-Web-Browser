@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b5tkit38a3ie6" path="res://src/App.gd" id="1"]
 [ext_resource type="PackedScene" path="res://src/BingHelp.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://src/BookMark.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://c01ebgp6v2udj" path="res://src/BookMark.tscn" id="3"]
 [ext_resource type="Script" uid="uid://b0rveep6nxmha" path="res://src/page.gd" id="3_0jhyc"]
 [ext_resource type="Texture2D" uid="uid://dopkcjn6momcd" path="res://icon.png" id="4"]
 
@@ -317,6 +317,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VSplitContainer" type="VBoxContainer" parent="UI"]
 layout_mode = 0
@@ -327,6 +329,8 @@ anchor_bottom = 1.0
 layout_mode = 2
 
 [node name="MenuButton" type="MenuButton" parent="UI/VSplitContainer/HBoxContainer"]
+editor_description = "Could be useful later."
+visible = false
 layout_mode = 2
 text = "Menu"
 
@@ -403,6 +407,7 @@ layout_mode = 2
 text = "DDG"
 
 [node name="OpenVerse" type="CheckBox" parent="UI/VSplitContainer/HBoxContainer"]
+editor_description = "Disabledtil I find a way of finding compat images."
 visible = false
 layout_mode = 2
 text = "OV"
@@ -429,21 +434,31 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Page" type="HFlowContainer" parent="UI/VSplitContainer/TabContainer"]
+[node name="Page" type="ScrollContainer" parent="UI/VSplitContainer/TabContainer"]
 layout_mode = 2
-script = ExtResource("3_0jhyc")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 metadata/_tab_index = 0
 
-[node name="Label" type="Label" parent="UI/VSplitContainer/TabContainer/Page"]
-visible = false
+[node name="Page" type="HFlowContainer" parent="UI/VSplitContainer/TabContainer/Page"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Johnny rebance."
-autowrap_mode = 3
+size_flags_vertical = 3
+script = ExtResource("3_0jhyc")
+
+[node name="Label" type="Label" parent="UI/VSplitContainer/TabContainer/Page/Page"]
+custom_minimum_size = Vector2(95, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Josh Washingot"
+autowrap_mode = 2
+justification_flags = 169
 
 [node name="Text" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 visible = false
 layout_mode = 2
+deselect_on_focus_loss_enabled = false
 wrap_mode = 1
 minimap_draw = true
 metadata/_tab_index = 1
@@ -451,6 +466,7 @@ metadata/_tab_index = 1
 [node name="Links" type="TextEdit" parent="UI/VSplitContainer/TabContainer"]
 visible = false
 layout_mode = 2
+deselect_on_focus_loss_enabled = false
 wrap_mode = 1
 metadata/_tab_index = 2
 
@@ -517,16 +533,24 @@ text = "X"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
+[node name="ImageHTTPRequest2Page" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+use_threads = true
+
 [node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
 use_threads = true
 
 [node name="IconHTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="IconHTTPRequest2" type="HTTPRequest" parent="."]
 
 [node name="BingHelp" parent="." instance=ExtResource("2")]
 
 [node name="Popup" type="Window" parent="."]
 oversampling_override = 1.0
 position = Vector2i(0, 36)
+visible = false
+force_native = true
 
 [node name="TextureRect" type="TextureRect" parent="Popup"]
 offset_right = 40.0
@@ -537,6 +561,8 @@ expand_mode = 1
 [node name="ImgPop" type="Window" parent="."]
 oversampling_override = 1.0
 position = Vector2i(0, 36)
+visible = false
+force_native = true
 
 [node name="TextureRect" type="TextureRect" parent="ImgPop"]
 anchors_preset = 15
@@ -565,10 +591,12 @@ stretch_mode = 1
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/OpenVerse" to="." method="_on_OpenVerse_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox2" to="." method="_on_CheckBox2_toggled"]
 [connection signal="toggled" from="UI/VSplitContainer/HBoxContainer/CheckBox3" to="." method="_on_CheckBox3_toggled"]
-[connection signal="resized" from="UI/VSplitContainer/TabContainer/Page" to="UI/VSplitContainer/TabContainer/Page" method="_on_resized"]
+[connection signal="resized" from="UI/VSplitContainer/TabContainer/Page/Page" to="UI/VSplitContainer/TabContainer/Page/Page" method="_on_resized"]
 [connection signal="text_changed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FinderLineEdit" to="." method="_on_FinderLineEdit_text_changed"]
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast" to="." method="_on_FindLast_pressed"]
 [connection signal="pressed" from="UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext" to="." method="_on_FindNext_pressed"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="request_completed" from="ImageHTTPRequest2Page" to="UI/VSplitContainer/TabContainer/Page/Page" method="_on_image_http_request_2_page_request_completed"]
 [connection signal="request_completed" from="ImageHTTPRequest" to="." method="_on_ImageHTTPRequest_request_completed"]
 [connection signal="request_completed" from="IconHTTPRequest" to="." method="_on_IconHTTPRequest_request_completed"]
+[connection signal="request_completed" from="IconHTTPRequest2" to="." method="_on_icon_http_request_2_request_completed"]

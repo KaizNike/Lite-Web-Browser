@@ -27,6 +27,8 @@ func extract_text_and_links(html: String) -> Dictionary:
 				break
 			else:
 				var tag = html.substr(open_tag_index + 1, close_tag_index - open_tag_index - 1)
+#				Confusion over this little stack overflow provided by Copilot
+# I need to find the beginning and end of href="https://mysite.net/"
 				if tag.begins_with("a "):
 					var href_index = tag.find("href=")
 					if href_index != -1:

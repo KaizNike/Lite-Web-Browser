@@ -86,9 +86,12 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 		var check2 = currentSite.find("/", check + 2)
 		if check2 != -1:
 			$BingHelp.site = currentSite.substr(0, check2)
+			%Page.site = currentSite.substr(0, check2)
 		else:
 			$BingHelp.site = currentSite
+			%Page.site = currentSite
 		var search = $BingHelp.extract_text_and_links(Html)
+		%Page.extract_page(Html)
 		images = search["images"]
 		imgIndex = 0
 		
@@ -101,6 +104,7 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 			fetch_next_image(imgIndex, images)
 		print("Loaded")
 		$UI/VSplitContainer/HBoxContainer/ProgressText/ProgressAnim.play("loaded")
+		$IconHTTPRequest2.request("https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + currentSite + "&size=16")
 		pathIndex += 1
 #		html = "<p>This is some text</p> aaa <p>This is some other text</p>"
 #		var regex = RegEx.new()
@@ -152,8 +156,8 @@ func _on_Button3_pressed():
 		print("Reading about it on A03")
 		search_term = "https://archiveofourown.org/works/search?work_search%5Bquery%5D=" + query
 	elif currentSearch == "OV":
-		print("Looking up images on OpenVerse.")
-		search_term = "https://yandex.com/images/search?text=" + query
+		print("Looking up images on ?.")
+		search_term = "https://duckduckgo.com/html/?q=" + query + "&iar=images"
 	else:
 		text_page.text = "No search selected."
 		html.text = "No html from search not selected."
@@ -274,12 +278,12 @@ func select_term(loc, text):
 func _on_FinderLineEdit_text_changed(new_text):
 	$UI/VSplitContainer/PanelContainer/HBoxContainer/FindNext.disabled = true
 	$UI/VSplitContainer/PanelContainer/HBoxContainer/FindLast.disabled = true
-	if text_page.visible:
-		for line in range(text_page.get_line_count()):
-			text_page.set_line_as_bookmark(line, false)
-	elif html.visible:
-		for line in range(html.get_line_count()):
-			html.set_line_as_bookmark(line, false)
+	#if text_page.visible:
+		#for line in range(text_page.get_line_count()):
+			#text_page.set_line_as_bookmark(line, false)
+	#elif html.visible:
+		#for line in range(html.get_line_count()):
+			#html.set_line_as_bookmark(line, false)
 	terms.clear()
 	termsAmt = 0
 	if new_text == "":
@@ -302,7 +306,7 @@ func _on_FinderLineEdit_text_changed(new_text):
 #				print(lineI)
 #			if lineI >= text_page.get_line_count() - 50:
 #				print(lineI)
-			text_page.set_line_as_bookmark(new_term.y, true)
+			#text_page.set_line_as_bookmark(new_term.y, true)
 			termsAmt += 1
 			if colI >= text_page.get_line(lineI).length():
 				colI = 0
@@ -356,7 +360,7 @@ func _on_FinderLineEdit_text_changed(new_text):
 #				print(lineI)
 #			if lineI >= html.get_line_count() - 50:
 #				print(lineI)
-			html.set_line_as_bookmark(new_term.y, true)
+			#html.set_line_as_bookmark(new_term.y, true)
 			termsAmt += 1
 			if colI >= html.get_line(lineI).length():
 				colI = 0
@@ -464,11 +468,11 @@ func _on_FindLast_pressed():
 
 func _on_WrapBox_toggled(button_pressed):
 	if button_pressed:
-		text_page.wrap_enabled = true
-		html.wrap_enabled = true
+		text_page.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_BOUNDARY
+		html.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_BOUNDARY
 	else:
-		text_page.wrap_enabled = false
-		html.wrap_enabled = false
+		text_page.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_NONE
+		html.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_NONE
 	text_page.update()
 	html.update()
 	pass # Replace with function body.
@@ -553,8 +557,8 @@ func _on_ImageHTTPRequest_request_completed(result, response_code, headers, body
 			img_vflow.add_child(panel)
 			
 			# Create a Popup
-#			var popup = PopupPanel.new()
-			var popup = Window.new()
+			var popup = PopupPanel.new()
+			#var popup = Window.new()
 			self.add_child(popup)
 			
 			# Connect the "gui_input" signal of the panel to a function
@@ -587,6 +591,8 @@ func _on_panel_clicked(event, texture, popup):
 		texture_rect.texture = texture
 #		texture_rect.expand = true
 		popup.add_child(texture_rect)
+		popup.min_size = Vector2i(50,50)
+		#popup.force_native = true
 		popup.popup_centered()
 
 func _on_IconHTTPRequest_request_completed(result, response_code, headers, body):
@@ -623,3 +629,15 @@ func _on_OpenVerse_toggled(button_pressed):
 	else:
 		currentSearch = ""
 	pass # Replace with function body.
+
+
+func _on_icon_http_request_2_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	if response_code == 200:
+		var img = Image.new()
+		var err = img.load_png_from_buffer(body)
+		img = ImageTexture.create_from_image(img)
+		if err == OK:
+			$UI/VSplitContainer/HBoxContainer/LineEdit.right_icon = img # Replace with function body.
+		else:
+			print("Icon Error for LineDit. ", err)
+			
